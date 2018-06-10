@@ -447,14 +447,6 @@ declare namespace ts {
         ExportDefault = 513,
         All = 3071
     }
-    enum JsxFlags {
-        None = 0,
-        /** An element from a named property of the JSX.IntrinsicElements interface */
-        IntrinsicNamedElement = 1,
-        /** An element inferred from the string index signature of the JSX.IntrinsicElements interface */
-        IntrinsicIndexedElement = 2,
-        IntrinsicElement = 3
-    }
     interface Node extends TextRange {
         kind: SyntaxKind;
         flags: NodeFlags;

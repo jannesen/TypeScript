@@ -553,16 +553,6 @@ namespace ts {
         All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Async | Default | Const
     }
 
-    export const enum JsxFlags {
-        None = 0,
-        /** An element from a named property of the JSX.IntrinsicElements interface */
-        IntrinsicNamedElement = 1 << 0,
-        /** An element inferred from the string index signature of the JSX.IntrinsicElements interface */
-        IntrinsicIndexedElement = 1 << 1,
-
-        IntrinsicElement = IntrinsicNamedElement | IntrinsicIndexedElement,
-    }
-
     /* @internal */
     export const enum RelationComparisonResult {
         Succeeded = 1, // Should be truthy
@@ -2542,6 +2532,57 @@ namespace ts {
         readonly unredirected: SourceFile;
     }
 
+    /* @internal */
+    export interface JsxDefinitions {
+        sourceFile: SourceFile;
+        checkPreconditions(node: JsxOpeningLikeElement | JsxOpeningFragment): void;
+        getMode(): JsxMode;
+        getNamespace(): string;
+        getValidateChildren(): boolean;
+        getIntrinsicElementType(intrinsicName: __String): Type;
+        getCustomElementType(tagType: Type): Type;
+        getStatelessElementType(): Type;
+        getFragmentType(childrenTypes: { child: JsxChild, type: Type }[]): Type;
+        getIntrinsicAttributesInfo(intrinsicName: __String, errorNode?: Node): JsxIntrinsicAttributesInfo;
+        getIntrinsicChildrenType(intrinsicName: __String): Type;
+        getIntrinsicElementsType(): Type;
+        getElementClassType(): Type;
+        getElementPropertiesName(): __String;
+        getElementChildrenPropertyName(): __String;
+        getIntrinsicAttributesType(): Type;
+        getIntrinsicClassAttributesType(): Type;
+        getEmitFactoryEntity(): EntityName;
+        getEmitReactNamespace(): string;
+        getEmitFramentAsArray(): boolean;
+        getEmitElementMode(jsxElement: JsxOpeningLikeElement): JsxElementEmitMode;
+    }
+    /* @internal */
+    export const enum JsxMode {
+        Generic = 0,
+        React = 1
+    }
+    /* @internal */
+    export interface JsxGenericIntrinsicFactory {
+        factorySymbol: Symbol;
+        map: UnderscoreEscapedMap<JsxIntrinsicElement>;
+    }
+    /* @internal */
+    export interface JsxIntrinsicElement extends JsxIntrinsicAttributesInfo {
+        childrenType?: Type;
+        returnedType?: Type;
+    }
+    /* @internal */
+    export interface JsxIntrinsicAttributesInfo {
+        intrinsicSymbol?: Symbol;
+        attributesType?: Type;
+    }
+    /* @internal */
+    export enum JsxElementEmitMode {
+        Intrinsic,
+        FactoryCall,
+        Construct,
+        FunctionCall
+    }
     // Source files are declarations when they are external modules.
     export interface SourceFile extends Declaration {
         kind: SyntaxKind.SourceFile;
@@ -2634,8 +2675,6 @@ namespace ts {
         /* @internal */ checkJsDirective: CheckJsDirective | undefined;
         /* @internal */ version: string;
         /* @internal */ pragmas: PragmaMap;
-        /* @internal */ localJsxNamespace?: __String;
-        /* @internal */ localJsxFactory?: EntityName;
     }
 
     export interface Bundle extends Node {
@@ -2758,7 +2797,7 @@ namespace ts {
          */
         getTypeChecker(): TypeChecker;
 
-        /* @internal */ getCommonSourceDirectory(): string;
+        getCommonSourceDirectory(): string;
 
         // For testing purposes only.  Should not be used by any other consumers (including the
         // language service).
@@ -2979,7 +3018,7 @@ namespace ts {
         /* @internal */ getImmediateAliasedSymbol(symbol: Symbol): Symbol;
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
         /** Unlike `getExportsOfModule`, this includes properties of an `export =` value. */
-        /* @internal */ getExportsAndPropertiesOfModule(moduleSymbol: Symbol): Symbol[];
+        getExportsAndPropertiesOfModule(moduleSymbol: Symbol): Symbol[];
 
         getAllAttributesTypeFromJsxOpeningLikeElement(elementNode: JsxOpeningLikeElement): Type | undefined;
         getJsxIntrinsicTagNamesAt(location: Node): Symbol[];
@@ -3079,6 +3118,7 @@ namespace ts {
          * and the operation is cancelled, then it should be discarded, otherwise it is safe to keep.
          */
         runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
+        isTypeIdenticalTo(source: Type, target: Type): boolean;
     }
 
     /* @internal */
@@ -3373,7 +3413,7 @@ namespace ts {
         getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): string[];
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[];
         isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
-        getJsxFactoryEntity(location?: Node): EntityName;
+        getJsxDefinitions(location?: Node): JsxDefinitions;
         getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
     }
 
@@ -3652,7 +3692,6 @@ namespace ts {
         isVisible?: boolean;              // Is this node visible
         containsArgumentsReference?: boolean; // Whether a function-like declaration contains an 'arguments' reference
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
-        jsxFlags?: JsxFlags;              // flags for knowing what kind of element/attributes we're dealing with
         resolvedJsxElementAttributesType?: Type;  // resolved element attributes type of a JSX openinglike element
         resolvedJsxElementAllAttributesType?: Type;  // resolved all element attributes type of a JSX openinglike element
         hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
@@ -5482,9 +5521,23 @@ namespace ts {
             kind: PragmaKindFlags.SingleLine
         },
         "jsx": {
-            args: [{ name: "factory" }],
+            args: [
+                { name: "factory" }
+            ],
             kind: PragmaKindFlags.MultiLine
         },
+        "jsx-mode": {
+            args: [
+                { name: "mode" }
+            ],
+            kind: PragmaKindFlags.MultiLine
+        },
+        "jsx-intrinsic-factory": {
+            args: [
+                { name: "factory" }
+            ],
+            kind: PragmaKindFlags.MultiLine
+        }
     });
 
     /* @internal */
