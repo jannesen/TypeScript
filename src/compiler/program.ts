@@ -1168,6 +1168,9 @@ namespace ts {
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
                 isEmitBlocked,
+                readFile: f => host.readFile(f),
+                fileExists: f => host.fileExists(f),
+                ...(host.directoryExists ? { directoryExists: f => host.directoryExists!(f) } : {}),
             };
         }
 
@@ -1802,11 +1805,9 @@ namespace ts {
                 else if (isLiteralImportTypeNode(node)) {
                     imports = append(imports, node.argument.literal);
                 }
-                else {
-                    collectDynamicImportOrRequireCallsForEachChild(node);
-                    if (hasJSDocNodes(node)) {
-                        forEach(node.jsDoc, collectDynamicImportOrRequireCallsForEachChild);
-                    }
+                collectDynamicImportOrRequireCallsForEachChild(node);
+                if (hasJSDocNodes(node)) {
+                    forEach(node.jsDoc, collectDynamicImportOrRequireCallsForEachChild);
                 }
             }
 

@@ -551,7 +551,9 @@ namespace ts {
 
         function visitSourceFile(node: SourceFile) {
             const alwaysStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") &&
-                !(isExternalModule(node) && moduleKind >= ModuleKind.ES2015);
+                !(isExternalModule(node) && moduleKind >= ModuleKind.ES2015) &&
+                !isJsonSourceFile(node);
+
             return updateSourceFileNode(
                 node,
                 visitLexicalEnvironment(node.statements, sourceElementVisitor, context, /*start*/ 0, alwaysStrict));
@@ -1908,6 +1910,7 @@ namespace ts {
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.ThisType:
+                case SyntaxKind.ImportType:
                     break;
 
                 default:

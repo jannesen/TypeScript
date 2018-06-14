@@ -1368,8 +1368,14 @@ namespace ts {
                             }
                         }
 
+                        // ES6 exports are also visible locally (except for 'default'), but commonjs exports are not (except typedefs)
                         if (name !== InternalSymbolName.Default && (result = lookup(moduleExports, name, meaning & SymbolFlags.ModuleMember))) {
-                            break loop;
+                            if (isSourceFile(location) && location.commonJsModuleIndicator && !result.declarations.some(isJSDocTypeAlias)) {
+                                result = undefined;
+                            }
+                            else {
+                                break loop;
+                            }
                         }
                         break;
                     case SyntaxKind.EnumDeclaration:
@@ -1502,9 +1508,8 @@ namespace ts {
                     case SyntaxKind.JSDocTypedefTag:
                     case SyntaxKind.JSDocCallbackTag:
                         // js type aliases do not resolve names from their host, so skip past it
-                        lastLocation = location;
-                        location = getJSDocHost(location).parent;
-                        continue;
+                        location = getJSDocHost(location);
+                        break;
                 }
                 if (isSelfReferenceLocation(location)) {
                     lastSelfReferenceLocation = location;
@@ -1828,7 +1833,7 @@ namespace ts {
         }
 
         function isSyntacticDefault(node: Node) {
-            return ((isExportAssignment(node) && !node.isExportEquals) || hasModifier(node, ModifierFlags.Default));
+            return ((isExportAssignment(node) && !node.isExportEquals) || hasModifier(node, ModifierFlags.Default) || isExportSpecifier(node));
         }
 
         function canHaveSyntheticDefault(file: SourceFile | undefined, moduleSymbol: Symbol, dontResolveAlias: boolean) {
@@ -2563,7 +2568,49 @@ namespace ts {
             return getMergedSymbol(symbol.parent && getLateBoundSymbol(symbol.parent));
         }
 
-        function getExportSymbolOfValueSymbolIfExported(symbol: Symbol): Symbol {
+        /**
+         * Attempts to find the symbol corresponding to the container a symbol is in - usually this
+         * is just its' `.parent`, but for locals, this value is `undefined`
+         */
+        function getContainerOfSymbol(symbol: Symbol): Symbol | undefined {
+            const container = getParentOfSymbol(symbol);
+            if (container) {
+                return container;
+            }
+            const candidate = forEach(symbol.declarations, d => !isAmbientModule(d) && d.parent && hasNonGlobalAugmentationExternalModuleSymbol(d.parent) ? getSymbolOfNode(d.parent) : undefined);
+            if (!candidate) {
+                return undefined;
+            }
+            const alias = getAliasForSymbolInContainer(candidate, symbol);
+            return alias ? candidate : undefined;
+        }
+
+        function getAliasForSymbolInContainer(container: Symbol, symbol: Symbol) {
+            if (container === getParentOfSymbol(symbol)) {
+                // fast path, `symbol` is either already the alias or isn't aliased
+                return symbol;
+            }
+            const exports = getExportsOfSymbol(container);
+            const quick = exports.get(symbol.escapedName);
+            if (quick && symbolRefersToTarget(quick)) {
+                return quick;
+            }
+            return forEachEntry(exports, exported => {
+                if (symbolRefersToTarget(exported)) {
+                    return exported;
+                }
+            });
+
+            function symbolRefersToTarget(s: Symbol) {
+                if (s === symbol || resolveSymbol(s) === symbol || resolveSymbol(s) === resolveSymbol(symbol)) {
+                    return s;
+                }
+            }
+        }
+
+        function getExportSymbolOfValueSymbolIfExported(symbol: Symbol): Symbol;
+        function getExportSymbolOfValueSymbolIfExported(symbol: Symbol | undefined): Symbol | undefined;
+        function getExportSymbolOfValueSymbolIfExported(symbol: Symbol | undefined): Symbol | undefined {
             return symbol && (symbol.flags & SymbolFlags.ExportValue) !== 0
                 ? getMergedSymbol(symbol.exportSymbol)
                 : symbol;
@@ -2866,7 +2913,7 @@ namespace ts {
                     // But it can't, hence the accessible is going to be undefined, but that doesn't mean m.c is inaccessible
                     // It is accessible if the parent m is accessible because then m.c can be accessed through qualification
                     meaningToLook = getQualifiedLeftMeaning(meaning);
-                    symbol = getParentOfSymbol(symbol);
+                    symbol = getContainerOfSymbol(symbol);
                 }
 
                 // This could be a symbol that is not exported in the external module
@@ -3537,9 +3584,13 @@ namespace ts {
                         context.enclosingDeclaration = undefined;
                         if (getCheckFlags(propertySymbol) & CheckFlags.Late) {
                             const decl = firstOrUndefined(propertySymbol.declarations);
-                            const name = hasLateBindableName(decl) && resolveEntityName(decl.name.expression, SymbolFlags.Value);
-                            if (name && context.tracker.trackSymbol) {
-                                context.tracker.trackSymbol(name, saveEnclosingDeclaration, SymbolFlags.Value);
+                            if (context.tracker.trackSymbol && hasLateBindableName(decl)) {
+                                // get symbol of the first identifier of the entityName
+                                const firstIdentifier = getFirstIdentifier(decl.name.expression);
+                                const name = resolveName(firstIdentifier, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
+                                if (name) {
+                                    context.tracker.trackSymbol(name, saveEnclosingDeclaration, SymbolFlags.Value);
+                                }
                             }
                         }
                         const propertyName = symbolToName(propertySymbol, context, SymbolFlags.Value, /*expectsIdentifier*/ true);
@@ -3753,12 +3804,12 @@ namespace ts {
                         needsQualification(accessibleSymbolChain[0], context.enclosingDeclaration, accessibleSymbolChain.length === 1 ? meaning : getQualifiedLeftMeaning(meaning))) {
 
                         // Go up and add our parent.
-                        const parent = getParentOfSymbol(accessibleSymbolChain ? accessibleSymbolChain[0] : symbol);
+                        const parent = getContainerOfSymbol(accessibleSymbolChain ? accessibleSymbolChain[0] : symbol);
                         if (parent) {
                             const parentChain = getSymbolChain(parent, getQualifiedLeftMeaning(meaning), /*endOfChain*/ false);
                             if (parentChain) {
                                 parentSymbol = parent;
-                                accessibleSymbolChain = parentChain.concat(accessibleSymbolChain || [symbol]);
+                                accessibleSymbolChain = parentChain.concat(accessibleSymbolChain || [getAliasForSymbolInContainer(parent, symbol) || symbol]);
                             }
                         }
                     }
@@ -4089,7 +4140,15 @@ namespace ts {
                         // ambient module, just use declaration/symbol name (fallthrough)
                     }
                     else {
-                        return `"${getResolvedExternalModuleName(context.tracker.moduleResolverHost, file, getSourceFileOfNode(getOriginalNode(context.enclosingDeclaration)))}"`;
+                        const contextFile = getSourceFileOfNode(getOriginalNode(context!.enclosingDeclaration))!;
+                        return `"${file.moduleName || moduleSpecifiers.getModuleSpecifiers(
+                            symbol,
+                            compilerOptions,
+                            contextFile,
+                            context!.tracker.moduleResolverHost!,
+                            context!.tracker.moduleResolverHost!.getSourceFiles!(),
+                            { importModuleSpecifierPreference: "non-relative" }
+                        )[0]}"`;
                     }
                 }
                 const declaration = symbol.declarations[0];
@@ -9175,12 +9234,13 @@ namespace ts {
         }
 
         function resolveImportSymbolType(node: ImportTypeNode, links: NodeLinks, symbol: Symbol, meaning: SymbolFlags) {
-            links.resolvedSymbol = symbol;
+            const resolvedSymbol = resolveSymbol(symbol);
+            links.resolvedSymbol = resolvedSymbol;
             if (meaning === SymbolFlags.Value) {
-                return links.resolvedType = getTypeOfSymbol(symbol);
+                return links.resolvedType = getTypeOfSymbol(symbol); // intentionally doesn't use resolved symbol so type is cached as expected on the alias
             }
             else {
-                return links.resolvedType = getTypeReferenceType(node, symbol);
+                return links.resolvedType = getTypeReferenceType(node, resolvedSymbol); // getTypeReferenceType doesn't handle aliases - it must get the resolved symbol
             }
         }
 
@@ -17559,7 +17619,7 @@ namespace ts {
                 // Even if the call is incomplete, we'll have a missing expression as our last argument,
                 // so we can say the count is just the arg list length
                 argCount = args.length;
-                typeArguments = undefined;
+                typeArguments = node.typeArguments;
 
                 if (node.template.kind === SyntaxKind.TemplateExpression) {
                     // If a tagged template expression lacks a tail literal, the call is incomplete.
@@ -18475,6 +18535,7 @@ namespace ts {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 const superType = checkSuperExpression(node.expression);
                 if (isTypeAny(superType)) {
+                    forEach(node.arguments, checkExpresionNoReturn); // Still visit arguments so they get marked for visibility, etc
                     return anySignature;
                 }
                 if (superType !== unknownType) {
@@ -20622,6 +20683,10 @@ namespace ts {
             return type;
         }
 
+        function checkExpresionNoReturn(node: Expression) {
+            checkExpression(node);
+        }
+
         // Checks an expression and returns its type. The contextualMapper parameter serves two purposes: When
         // contextualMapper is not undefined and not equal to the identityMapper function object it indicates that the
         // expression is being inferentially typed (section 4.15.2 in spec) and provides the type mapper to use in
@@ -22563,7 +22628,7 @@ namespace ts {
         function errorUnusedLocal(declaration: Declaration, name: string, addDiagnostic: AddUnusedDiagnostic) {
             const node = getNameOfDeclaration(declaration) || declaration;
             const message = isTypeDeclaration(declaration) ? Diagnostics._0_is_declared_but_never_used : Diagnostics._0_is_declared_but_its_value_is_never_read;
-            addDiagnostic(UnusedKind.Local, createDiagnosticForNodeSpan(getSourceFileOfNode(declaration), declaration, node, message, name));
+            addDiagnostic(UnusedKind.Local, createDiagnosticForNode(node, message, name));
         }
 
         function parameterNameStartsWithUnderscore(parameterName: DeclarationName) {
