@@ -114,13 +114,12 @@ namespace ts {
                 }
             }
 
-            const element = createExpressionForJsxElement(
-                context.getEmitResolver().getJsxDefinitions(currentSourceFile),
-                node,
-                objectProperties,
-                mapDefined(children, transformJsxChildToExpression),
-                location
-            );
+            const element = context.getEmitResolver().getJsxDefinitions(currentSourceFile).emitCreateExpressionForJsxElement(
+                                node,
+                                objectProperties,
+                                mapDefined(children, transformJsxChildToExpression),
+                                location
+                            );
 
             if (isChild) {
                 startOnNewLine(element);
@@ -130,8 +129,7 @@ namespace ts {
         }
 
         function visitJsxOpeningFragment(node: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, isChild: boolean, location: TextRange) {
-            const element = createExpressionForJsxFragment(
-                context.getEmitResolver().getJsxDefinitions(currentSourceFile),
+            const element = context.getEmitResolver().getJsxDefinitions(currentSourceFile).emitCreateExpressionForJsxFragment(
                 mapDefined(children, transformJsxChildToExpression),
                 node,
                 location

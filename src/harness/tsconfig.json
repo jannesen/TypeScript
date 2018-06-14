@@ -53,6 +53,8 @@
         "../compiler/resolutionCache.ts",
         "../compiler/watch.ts",
         "../compiler/commandLineParser.ts",
+        "../compiler/jsx/generic.ts",
+        "../compiler/jsx/react.ts",
 
         "../services/types.ts",
         "../services/utilities.ts",

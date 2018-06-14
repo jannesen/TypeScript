@@ -2533,11 +2533,13 @@ namespace ts {
     }
 
     /* @internal */
-    export interface JsxDefinitions {
+    export interface JsxImplementation {
         sourceFile: SourceFile;
-        checkPreconditions(node: JsxOpeningLikeElement | JsxOpeningFragment): void;
-        getMode(): JsxMode;
+    /* Editor interface */
         getNamespace(): string;
+        getJsxIntrinsicTagNames(): Symbol[];
+    /* Checker */
+        checkPreconditions(node: JsxOpeningLikeElement | JsxOpeningFragment): void;
         getValidateChildren(): boolean;
         getIntrinsicElementType(intrinsicName: __String): Type;
         getCustomElementType(tagType: Type): Type;
@@ -2545,43 +2547,52 @@ namespace ts {
         getFragmentType(childrenTypes: { child: JsxChild, type: Type }[]): Type;
         getIntrinsicAttributesInfo(intrinsicName: __String, errorNode?: Node): JsxIntrinsicAttributesInfo;
         getIntrinsicChildrenType(intrinsicName: __String): Type;
-        getIntrinsicElementsType(): Type;
         getElementClassType(): Type;
         getElementPropertiesName(): __String;
         getElementChildrenPropertyName(): __String;
         getIntrinsicAttributesType(): Type;
         getIntrinsicClassAttributesType(): Type;
-        getEmitFactoryEntity(): EntityName;
-        getEmitReactNamespace(): string;
-        getEmitFramentAsArray(): boolean;
-        getEmitElementMode(jsxElement: JsxOpeningLikeElement): JsxElementEmitMode;
+    /* Emitter */
+        emitCreateExpressionForJsxElement(jsxElement: JsxOpeningLikeElement, props: Expression, children: ReadonlyArray<Expression>, location: TextRange): LeftHandSideExpression;
+        emitCreateExpressionForJsxFragment(children: ReadonlyArray<Expression>, parentElement: JsxOpeningFragment, location: TextRange): LeftHandSideExpression;
     }
     /* @internal */
-    export const enum JsxMode {
-        Generic = 0,
-        React = 1
-    }
-    /* @internal */
-    export interface JsxGenericIntrinsicFactory {
-        factorySymbol: Symbol;
-        map: UnderscoreEscapedMap<JsxIntrinsicElement>;
-    }
-    /* @internal */
-    export interface JsxIntrinsicElement extends JsxIntrinsicAttributesInfo {
-        childrenType?: Type;
-        returnedType?: Type;
+    export interface JsxTypeChecker {
+        compilerOptions: CompilerOptions;
+        languageVersion: ScriptTarget;
+        noImplicitAny: boolean;
+        nullType: Type;
+        unknownType: Type;
+        hasDiagnostics(): boolean;
+        createArrayType(elementType: Type): ObjectType;
+        error(location: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void;
+        getDeclaredTypeOfSymbol(symbol: Symbol): Type;
+        getExportsOfSymbol(symbol: Symbol): SymbolTable;
+        getFirstIdentifier(node: EntityNameOrEntityNameExpression): Identifier;
+        getGlobalSymbol(name: __String, meaning: SymbolFlags, diagnostic: DiagnosticMessage): Symbol;
+        getIndexTypeOfType(type: Type, kind: IndexKind): Type;
+        getNodeLinks(node: Node): NodeLinks;
+        getPropertiesOfType(type: Type): Symbol[];
+        getPropertyOfType(type: Type, name: __String): Symbol | undefined;
+        getSignaturesOfType(type: Type, kind: SignatureKind): Signature[];
+        getSymbol(symbols: SymbolTable, name: __String, meaning: SymbolFlags): Symbol;
+        getTypeOfSymbol(symbol: Symbol): Type;
+        getUnionType(types: Type[], unionReduction: UnionReduction, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type;
+        isArrayLikeType(type: Type): boolean;
+        isConstEnumOrConstEnumOnlyModule(s: Symbol): boolean;
+        isJsxIntrinsicIdentifier(tagName: JsxTagNameExpression): boolean;
+        markAliasSymbolAsReferenced(symbol: Symbol): void;
+        resolveAlias(symbol: Symbol): Symbol;
+        resolveEntityName(name: EntityNameOrEntityNameExpression, meaning: SymbolFlags, ignoreErrors?: boolean, dontResolveAlias?: boolean, location?: Node): Symbol | undefined;
+        resolveName(location: Node | undefined, name: __String, meaning: SymbolFlags, nameNotFoundMessage: DiagnosticMessage | undefined, nameArg: __String | Identifier, isUse: boolean, excludeGlobals: boolean, suggestedNameNotFoundMessage?: DiagnosticMessage): Symbol;
+        resolveStructuredTypeMembers(type: StructuredType): ResolvedType;
+        resolveSymbol(symbol: Symbol, dontResolveAlias?: boolean): Symbol;
+        setEntityReferenced(sourceFile: SourceFile, entityName: EntityName, flags: SymbolFlags): void;
     }
     /* @internal */
     export interface JsxIntrinsicAttributesInfo {
         intrinsicSymbol?: Symbol;
         attributesType?: Type;
-    }
-    /* @internal */
-    export enum JsxElementEmitMode {
-        Intrinsic,
-        FactoryCall,
-        Construct,
-        FunctionCall
     }
     // Source files are declarations when they are external modules.
     export interface SourceFile extends Declaration {
@@ -3413,7 +3424,7 @@ namespace ts {
         getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): string[];
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[];
         isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
-        getJsxDefinitions(location?: Node): JsxDefinitions;
+        getJsxDefinitions(location?: Node): JsxImplementation;
         getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
     }
 

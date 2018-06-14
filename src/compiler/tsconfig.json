@@ -46,6 +46,8 @@
         "resolutionCache.ts",
         "watch.ts",
         "commandLineParser.ts",
-        "tsc.ts"
+        "tsc.ts",
+        "jsx/generic.ts",
+        "jsx/react.ts"
     ]
 }
