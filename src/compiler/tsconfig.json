@@ -52,5 +52,7 @@
         "watch.ts",
         "tsbuild.ts",
         "inspectValue.ts",
+        "jsx/generic.ts",
+        "jsx/react.ts"
     ]
 }

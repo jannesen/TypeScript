@@ -589,16 +589,6 @@ namespace ts {
         All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Async | Default | Const
     }
 
-    export const enum JsxFlags {
-        None = 0,
-        /** An element from a named property of the JSX.IntrinsicElements interface */
-        IntrinsicNamedElement = 1 << 0,
-        /** An element inferred from the string index signature of the JSX.IntrinsicElements interface */
-        IntrinsicIndexedElement = 1 << 1,
-
-        IntrinsicElement = IntrinsicNamedElement | IntrinsicIndexedElement,
-    }
-
     /* @internal */
     export const enum RelationComparisonResult {
         Succeeded = 1, // Should be truthy
@@ -2628,6 +2618,81 @@ namespace ts {
         readonly unredirected: SourceFile;
     }
 
+/* @internal */
+    export interface JsxImplementation {
+    /* Editor interface */
+        getNamespace(): string;
+        getJsxIntrinsicTagNames(): Symbol[];
+    /* Checker */
+        checkPreconditions(node: JsxOpeningLikeElement | JsxOpeningFragment, diagnostics: boolean): void;
+        getValidateChildren(): boolean;
+        getIntrinsicElementType(intrinsicName: __String): Type;
+        getCustomElementType(tagType: Type): Type;
+        getFragmentType(childrenTypes: { type: Type }[]): Type;
+        getElementBaseType(refKind: JsxReferenceKind): Type | undefined;
+        getAttributesType(refKind: JsxReferenceKind, node: JsxOpeningLikeElement, signature: Signature): Type;
+        getIntrinsicChildrenType(intrinsicName: __String): Type | undefined;
+        getIntrinsicSignature(intrinsicName: __String, node: JsxOpeningLikeElement): { signature: Signature, attrType: Type } | undefined;
+        getIntrinsicSymbol(intrinsicName: __String, errorNode: Node, reportAny: boolean): Symbol;
+        getElementChildrenPropertyName(): __String | undefined;
+        getIntrinsicAttributesType(): Type;
+        getIntrinsicClassAttributesType(): Type;
+    /* Emitter */
+        emitCreateExpressionForJsxElement(jsxElement: JsxOpeningLikeElement, props: Expression, children: ReadonlyArray<Expression>, location: TextRange): LeftHandSideExpression;
+        emitCreateExpressionForJsxFragment(children: ReadonlyArray<Expression>, parentElement: JsxOpeningFragment, location: TextRange): LeftHandSideExpression;
+    }
+
+    /* @internal */
+    export interface JsxTypeChecker {
+        compilerOptions: CompilerOptions;
+        languageVersion: ScriptTarget;
+        nullType: Type;
+        anyType: Type;
+        errorType: Type;
+        emptyObjectType: Type;
+        unknownSignature: Signature;
+        unknownSymbol: Symbol;
+        error(location: Node | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void;
+        checkExpressionCached(node: Expression): Type;
+        createArrayType(elementType: Type): ObjectType;
+        createSignature(declaration: SignatureDeclaration | JSDocSignature | undefined, typeParameters: ReadonlyArray<TypeParameter> | undefined, thisParameter: Symbol | undefined, parameters: ReadonlyArray<Symbol>, resolvedReturnType: Type | undefined, resolvedTypePredicate: TypePredicate | undefined, minArgumentCount: number, hasRestParameter: boolean, hasLiteralTypes: boolean): Signature;
+        createSymbol(flags: SymbolFlags, name: __String, checkFlags?: CheckFlags): TransientSymbol;
+        createTypeReference(target: GenericType, typeArguments: ReadonlyArray<Type> | undefined): TypeReference;
+        fillMissingTypeArguments(typeArguments: ReadonlyArray<Type>, typeParameters: ReadonlyArray<TypeParameter> | undefined, minTypeArgumentCount: number, isJavaScriptImplicitAny: boolean): Type[];
+        getDeclaredTypeOfSymbol(symbol: Symbol): Type;
+        getExportsOfSymbol(symbol: Symbol): SymbolTable;
+        getFirstIdentifier(node: EntityNameOrEntityNameExpression): Identifier;
+        getGlobalSymbol(name: __String, meaning: SymbolFlags, diagnostic: DiagnosticMessage | undefined): Symbol | undefined;
+        getIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined;
+        getJsxReferenceKind(node: JsxOpeningLikeElement): JsxReferenceKind;
+        getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): TypeParameter[] | undefined;
+        getMinTypeArgumentCount(typeParameters: ReadonlyArray<TypeParameter> | undefined): number;
+        getOrCreateTypeFromSignature(signature: Signature): ObjectType;
+        getPropertiesOfType(type: Type): Symbol[];
+        getPropertyOfType(type: Type, name: __String): Symbol | undefined;
+        getReturnTypeOfSignature(signature: Signature): Type;
+        getSignaturesOfType(type: Type, kind: SignatureKind): ReadonlyArray<Signature>;
+        getSymbol(symbols: SymbolTable, name: __String, meaning: SymbolFlags): Symbol | undefined;
+        getTypeAliasInstantiation(symbol: Symbol, typeArguments: ReadonlyArray<Type> | undefined): Type;
+        getTypeOfFirstParameterOfSignatureWithFallback(signature: Signature, fallbackType: Type): Type;
+        getTypeOfPropertyOfType(type: Type, name: __String): Type | undefined;
+        getTypeOfSymbol(symbol: Symbol): Type;
+        getUnionType(types: ReadonlyArray<Type>, unionReduction: UnionReduction, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type;
+        intersectTypes(type1: Type, type2: Type): Type;
+        isArrayLikeType(type: Type): boolean;
+        isConstEnumOrConstEnumOnlyModule(s: Symbol): boolean;
+        isTypeAny(type: Type | undefined): boolean | undefined;
+        markAliasSymbolAsReferenced(symbol: Symbol): void;
+        nodeBuildersymbolToEntityName(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker): EntityName | undefined;
+        nodeBuildertypeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined;
+        resolveAlias(symbol: Symbol): Symbol;
+        resolveEntityName(name: EntityNameOrEntityNameExpression, meaning: SymbolFlags, ignoreErrors?: boolean, dontResolveAlias?: boolean, location?: Node): Symbol | undefined;
+        resolveName(location: Node | undefined, name: __String, meaning: SymbolFlags, nameNotFoundMessage: DiagnosticMessage | undefined, nameArg: __String | Identifier | undefined, isUse: boolean, excludeGlobals: boolean, suggestedNameNotFoundMessage?: DiagnosticMessage): Symbol | undefined;
+        resolveStructuredTypeMembers(type: StructuredType): ResolvedType;
+        resolveSymbol(symbol: Symbol, dontResolveAlias?: boolean): Symbol;
+        setEntityReferenced(sourceFile: SourceFile, entityName: EntityName, flags: SymbolFlags): void;
+    }
+
     // Source files are declarations when they are external modules.
     export interface SourceFile extends Declaration {
         kind: SyntaxKind.SourceFile;
@@ -2881,7 +2946,7 @@ namespace ts {
          */
         getTypeChecker(): TypeChecker;
 
-        /* @internal */ getCommonSourceDirectory(): string;
+        getCommonSourceDirectory(): string;
 
         // For testing purposes only.  Should not be used by any other consumers (including the
         // language service).
@@ -3110,7 +3175,7 @@ namespace ts {
         /* @internal */ getImmediateAliasedSymbol(symbol: Symbol): Symbol | undefined;
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
         /** Unlike `getExportsOfModule`, this includes properties of an `export =` value. */
-        /* @internal */ getExportsAndPropertiesOfModule(moduleSymbol: Symbol): Symbol[];
+        getExportsAndPropertiesOfModule(moduleSymbol: Symbol): Symbol[];
         getJsxIntrinsicTagNamesAt(location: Node): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
         getAmbientModules(): Symbol[];
@@ -3222,6 +3287,7 @@ namespace ts {
          * and the operation is cancelled, then it should be discarded, otherwise it is safe to keep.
          */
         runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
+        isTypeIdenticalTo(source: Type, target: Type): boolean;
 
         /* @internal */ getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): ReadonlyArray<TypeParameter> | undefined;
     }
@@ -3511,7 +3577,7 @@ namespace ts {
         getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): string[] | undefined;
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[] | undefined;
         isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
-        getJsxFactoryEntity(location?: Node): EntityName | undefined;
+        getJsxImplementation(location?: Node): JsxImplementation;
         getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
         getSymbolOfExternalModuleSpecifier(node: StringLiteralLike): Symbol | undefined;
         isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement): boolean;
@@ -3792,9 +3858,7 @@ namespace ts {
         isVisible?: boolean;              // Is this node visible
         containsArgumentsReference?: boolean; // Whether a function-like declaration contains an 'arguments' reference
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
-        jsxFlags: JsxFlags;              // flags for knowing what kind of element/attributes we're dealing with
-        resolvedJsxElementAttributesType?: Type;  // resolved element attributes type of a JSX openinglike element
-        resolvedJsxElementAllAttributesType?: Type;  // resolved all element attributes type of a JSX openinglike element
+        resolvedJsxIntrinsicInfo?: JsxReactIntrinsicData;  // resolved element attributes type of a JSX openinglike element
         hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
         superCall?: SuperCall;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing
         switchTypes?: Type[];             // Cached array of switch case expression types
@@ -3802,6 +3866,7 @@ namespace ts {
         contextFreeType?: Type;          // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
         deferredNodes?: Map<Node>; // Set of nodes whose checking has been deferred
         capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement
+        jsxReferenceKind?: JsxReferenceKind; // Kind of JsxElement used during emit.
     }
 
     export const enum TypeFlags {
@@ -4237,6 +4302,7 @@ namespace ts {
 
     /* @internal */
     export const enum JsxReferenceKind {
+        Intrinsic,
         Component,
         Function,
         Mixed
@@ -5789,6 +5855,14 @@ namespace ts {
             args: [{ name: "factory" }],
             kind: PragmaKindFlags.MultiLine
         },
+        "jsx-mode": {
+            args: [{ name: "mode" }],
+            kind: PragmaKindFlags.MultiLine
+        },
+        "jsx-intrinsic-factory": {
+            args: [{ name: "factory" }],
+            kind: PragmaKindFlags.MultiLine
+        }
     });
 
     /* @internal */

@@ -1,0 +1,36 @@
+tests/cases/conformance/jsxGeneric/file.tsx(26,6): error TS2741: Property 'dummy' is missing in type 'Span' but required in type 'Div'.
+
+
+==== tests/cases/conformance/jsxGeneric/file.tsx (1 errors) ====
+    /* @jsx-mode generic */
+    
+    interface Attributes {
+        class?:     string;
+        id?:        string;
+        onclick?:   (this: HTMLElement, ev: MouseEvent) => void;
+    }
+     
+    class Div {
+    	constructor(attrs?: Attributes, ...children:Span[]) {
+    	}
+    	
+    	public dummy() {
+    	}
+    }
+    
+    class Span {
+    	constructor(attrs?: Attributes, ...children:Div[]) {
+    	}
+    }
+    
+    function test() {
+        return <Div class="test">
+                    <Span>
+    					<Div/>
+    					<Span/>
+    					~~~~~~~
+!!! error TS2741: Property 'dummy' is missing in type 'Span' but required in type 'Div'.
+!!! related TS2728 tests/cases/conformance/jsxGeneric/file.tsx:13:9: 'dummy' is declared here.
+    				</Span>
+               </Div>;
+    }
