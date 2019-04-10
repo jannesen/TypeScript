@@ -55,6 +55,7 @@
         "tsbuild.ts",
         "inspectValue.ts",
         "jsx/generic.ts",
-        "jsx/react.ts"
+        "jsx/react.ts",
+        "extensions.ts"
     ]
 }

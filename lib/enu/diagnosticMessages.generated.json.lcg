@@ -3429,9 +3429,39 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Intrinsic_JSX_element_0_does_not_exist_in_factory_1_2801" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Intrinsic JSX element '{0}' does not exist in factory '{1}'.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Invalid_JSX_intrinsic_factory_17022" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Invalid JSX intrinsic factory]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Invalid_character_1127" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Invalid character.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Invalid_factory_in_jsx_intrinsic_factory_pragma_17019" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Invalid factory in jsx-intrinsic-factory pragma.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Invalid_factory_in_jsx_pragma_17020" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Invalid factory in jsx pragma.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Invalid_jsx_mode_pragma_Must_be_react_or_generic_17018" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Invalid jsx-mode pragma. Must be react or generic.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -3552,6 +3582,12 @@
             <Item ItemId=";JSX_attributes_must_only_be_assigned_a_non_empty_expression_17000" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[JSX attributes must only be assigned a non-empty 'expression'.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";JSX_element_0_has_no_children_2610" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[JSX element '{0}' has no children.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -3945,6 +3981,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";No_JSX_intrinsic_factory_defined_17021" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[No JSX intrinsic factory defined.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";No_base_constructor_has_the_specified_number_of_type_arguments_2508" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[No base constructor has the specified number of type arguments.]]></Val>
@@ -3990,6 +4032,12 @@
             <Item ItemId=";Not_all_code_paths_return_a_value_7030" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Not all code paths return a value.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Not_supported_JSX_element_2802" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Not supported JSX element.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>

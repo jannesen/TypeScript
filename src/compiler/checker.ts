@@ -374,7 +374,7 @@ namespace ts {
                     cancellationToken = undefined;
                 }
             },
-
+            isTypeIdenticalTo,
             getLocalTypeParametersOfClassOrInterfaceOrTypeAlias,
         };
 
