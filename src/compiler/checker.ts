@@ -1,3 +1,4 @@
+// tslint:disable no-unnecessary-type-assertion just make V3.6.3 build without errors.
 /* @internal */
 namespace ts {
     const ambientModuleSymbolRegex = /^".+"$/;
