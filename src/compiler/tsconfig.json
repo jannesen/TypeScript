@@ -56,5 +56,7 @@
         "moduleSpecifiers.ts",
         "watch.ts",
         "tsbuild.ts",
+        "jsx/generic.ts",
+        "jsx/react.ts"
     ]
 }

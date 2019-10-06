@@ -1,0 +1,453 @@
+=== tests/cases/conformance/jsxGeneric/dom.ts ===
+export interface HTMLAttributes {
+    accept?:                string;
+>accept : string
+
+    acceptCharset?:         string;
+>acceptCharset : string
+
+    accessKey?:             string;
+>accessKey : string
+
+    action?:                string;
+>action : string
+
+    allowFullScreen?:       boolean;
+>allowFullScreen : boolean
+
+    allowTransparency?:     boolean;
+>allowTransparency : boolean
+
+    alt?:                   string;
+>alt : string
+
+    async?:                 boolean;
+>async : boolean
+
+    autoComplete?:          boolean;
+>autoComplete : boolean
+
+    autoFocus?:             boolean;
+>autoFocus : boolean
+
+    autoPlay?:              boolean;
+>autoPlay : boolean
+
+    cellPadding?:           number | string;
+>cellPadding : string | number
+
+    cellSpacing?:           number | string;
+>cellSpacing : string | number
+
+    charSet?:               string;
+>charSet : string
+
+    checked?:               boolean;
+>checked : boolean
+
+    classID?:               string;
+>classID : string
+
+    class?:                 string;
+>class : string
+
+    colSpan?:               number | string;
+>colSpan : string | number
+
+    cols?:                  number;
+>cols : number
+
+    content?:               string;
+>content : string
+
+    contentEditable?:       boolean;
+>contentEditable : boolean
+
+    contextMenu?:           string;
+>contextMenu : string
+
+    controls?:              any;
+>controls : any
+
+    coords?:                string;
+>coords : string
+
+    crossOrigin?:           string;
+>crossOrigin : string
+
+    data?:                  string;
+>data : string
+
+    dateTime?:              string;
+>dateTime : string
+
+    defaultChecked?:        boolean;
+>defaultChecked : boolean
+
+    defaultValue?:          string;
+>defaultValue : string
+
+    defer?:                 boolean;
+>defer : boolean
+
+    dir?:                   string;
+>dir : string
+
+    disabled?:              boolean;
+>disabled : boolean
+
+    download?:              any;
+>download : any
+
+    draggable?:             boolean;
+>draggable : boolean
+
+    encType?:               string;
+>encType : string
+
+    for?:                   string;
+>for : string
+
+    form?:                  string;
+>form : string
+
+    formAction?:            string;
+>formAction : string
+
+    formEncType?:           string;
+>formEncType : string
+
+    formMethod?:            string;
+>formMethod : string
+
+    formNoValidate?:        boolean;
+>formNoValidate : boolean
+
+    formTarget?:            string;
+>formTarget : string
+
+    frameBorder?:           number | string;
+>frameBorder : string | number
+
+    headers?:               string;
+>headers : string
+
+    height?:                number | string;
+>height : string | number
+
+    hidden?:                boolean;
+>hidden : boolean
+
+    high?:                  number;
+>high : number
+
+    href?:                  string;
+>href : string
+
+    hrefLang?:              string;
+>hrefLang : string
+
+    htmlFor?:               string;
+>htmlFor : string
+
+    httpEquiv?:             string;
+>httpEquiv : string
+
+    icon?:                  string;
+>icon : string
+
+    id?:                    string;
+>id : string
+
+    label?:                 string;
+>label : string
+
+    lang?:                  string;
+>lang : string
+
+    list?:                  string;
+>list : string
+
+    loop?:                  boolean;
+>loop : boolean
+
+    low?:                   number;
+>low : number
+
+    manifest?:              string;
+>manifest : string
+
+    marginHeight?:          number;
+>marginHeight : number
+
+    marginWidth?:           number;
+>marginWidth : number
+
+    max?:                   number | string;
+>max : string | number
+
+    maxLength?:             number;
+>maxLength : number
+
+    media?:                 string;
+>media : string
+
+    mediaGroup?:            string;
+>mediaGroup : string
+
+    method?:                string;
+>method : string
+
+    min?:                   number | string;
+>min : string | number
+
+    multiple?:              boolean;
+>multiple : boolean
+
+    muted?:                 boolean;
+>muted : boolean
+
+    name?:                  string;
+>name : string
+
+    noValidate?:            boolean;
+>noValidate : boolean
+
+    open?:                  boolean;
+>open : boolean
+
+    optimum?:               number;
+>optimum : number
+
+    pattern?:               string;
+>pattern : string
+
+    placeholder?:           string;
+>placeholder : string
+
+    poster?:                string;
+>poster : string
+
+    preload?:               string;
+>preload : string
+
+    radioGroup?:            string;
+>radioGroup : string
+
+    readOnly?:              boolean;
+>readOnly : boolean
+
+    rel?:                   string;
+>rel : string
+
+    required?:              boolean;
+>required : boolean
+
+    role?:                  string;
+>role : string
+
+    rowSpan?:               number;
+>rowSpan : number
+
+    rows?:                  number;
+>rows : number
+
+    sandbox?:               string;
+>sandbox : string
+
+    scope?:                 string;
+>scope : string
+
+    scoped?:                boolean;
+>scoped : boolean
+
+    scrolling?:             string;
+>scrolling : string
+
+    seamless?:              boolean;
+>seamless : boolean
+
+    selected?:              boolean;
+>selected : boolean
+
+    shape?:                 string;
+>shape : string
+
+    size?:                  number;
+>size : number
+
+    sizes?:                 string;
+>sizes : string
+
+    span?:                  number | string;
+>span : string | number
+
+    spellCheck?:            boolean;
+>spellCheck : boolean
+
+    src?:                   string;
+>src : string
+
+    srcDoc?:                string;
+>srcDoc : string
+
+    srcSet?:                string;
+>srcSet : string
+
+    start?:                 number;
+>start : number
+
+    step?:                  number|string;
+>step : string | number
+
+    style?:                 string;
+>style : string
+
+    tabIndex?:              number|string;
+>tabIndex : string | number
+
+    target?:                string;
+>target : string
+
+    title?:                 string;
+>title : string
+
+    type?:                  string;
+>type : string
+
+    useMap?:                string;
+>useMap : string
+
+    value?:                 string;
+>value : string
+
+    width?:                 number|string;
+>width : string | number
+
+    wmode?:                 string;
+>wmode : string
+
+    onblur?:                EventHandler<FocusEvent>;
+>onblur : EventHandler<FocusEvent>
+
+    onclick?:               EventHandler<MouseEvent>;
+>onclick : EventHandler<MouseEvent>
+
+    onchange?:              EventHandler<Event>;
+>onchange : EventHandler<Event>
+
+    oncontextmenu?:         EventHandler<PointerEvent>;
+>oncontextmenu : EventHandler<PointerEvent>
+
+    ondblclick?:            EventHandler<MouseEvent>;
+>ondblclick : EventHandler<MouseEvent>
+
+    onerror?:               EventHandler<Event>;
+>onerror : EventHandler<Event>
+
+    onfocus?:               EventHandler<FocusEvent>;
+>onfocus : EventHandler<FocusEvent>
+
+    oninput?:               EventHandler<Event>;
+>oninput : EventHandler<Event>
+
+    onkeydown?:             EventHandler<KeyboardEvent>;
+>onkeydown : EventHandler<KeyboardEvent>
+
+    onkeypress?:            EventHandler<KeyboardEvent>;
+>onkeypress : EventHandler<KeyboardEvent>
+
+    onkeyup?:               EventHandler<KeyboardEvent>;
+>onkeyup : EventHandler<KeyboardEvent>
+
+    onload?:                EventHandler<Event>;
+>onload : EventHandler<Event>
+
+    onmousedown?:           EventHandler<MouseEvent>;
+>onmousedown : EventHandler<MouseEvent>
+
+    onmouseenter?:          EventHandler<MouseEvent>;
+>onmouseenter : EventHandler<MouseEvent>
+
+    onmouseleave?:          EventHandler<MouseEvent>;
+>onmouseleave : EventHandler<MouseEvent>
+
+    onmousemove?:           EventHandler<MouseEvent>;
+>onmousemove : EventHandler<MouseEvent>
+
+    onmouseout?:            EventHandler<MouseEvent>;
+>onmouseout : EventHandler<MouseEvent>
+
+    onmouseover?:           EventHandler<MouseEvent>;
+>onmouseover : EventHandler<MouseEvent>
+
+    onmouseup?:             EventHandler<MouseEvent>;
+>onmouseup : EventHandler<MouseEvent>
+
+    onwheel?:               EventHandler<WheelEvent>;
+>onwheel : EventHandler<WheelEvent>
+
+    onscroll?:              EventHandler<UIEvent>;
+>onscroll : EventHandler<UIEvent>
+
+    onselect?:              EventHandler<UIEvent>;
+>onselect : EventHandler<UIEvent>
+}
+
+export interface EventHandler<T> {
+    (event: T): void;
+>event : T
+}
+
+type intrinsicNames = "a" | "abbr" | "address" | "area" | "article" | "aside" | "audio" | "b" | "base" | "bdi" | "bdo" | "big" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "footer" | "form" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "keygen" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "menu" | "menuitem" | "meta" | "meter" | "nav" | "noscript" | "object" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr";
+>intrinsicNames : intrinsicNames
+
+export interface AddArray extends Array<AddNode> {}
+export type AddNode    = HTMLElement|string|AddArray|undefined|null|false;
+>AddNode : AddNode
+>null : null
+>false : false
+
+export function createElement(tagName:intrinsicNames, attrs?: HTMLAttributes, ...children:AddNode[]): HTMLElement {
+>createElement : (tagName: intrinsicNames, attrs?: HTMLAttributes, ...children: AddNode[]) => HTMLElement
+>tagName : intrinsicNames
+>attrs : HTMLAttributes
+>children : AddNode[]
+
+    return document.createElement(tagName);
+>document.createElement(tagName) : HTMLElement
+>document.createElement : { <K extends "object" | "a" | "abbr" | "address" | "area" | "article" | "aside" | "audio" | "b" | "base" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "footer" | "form" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr" | "applet" | "basefont" | "dir" | "font" | "frame" | "frameset" | "hgroup" | "marquee" | "slot" | "template">(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K extends "listing" | "xmp">(tagName: K, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; }
+>document : Document
+>createElement : { <K extends "object" | "a" | "abbr" | "address" | "area" | "article" | "aside" | "audio" | "b" | "base" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "footer" | "form" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr" | "applet" | "basefont" | "dir" | "font" | "frame" | "frameset" | "hgroup" | "marquee" | "slot" | "template">(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K extends "listing" | "xmp">(tagName: K, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; }
+>tagName : intrinsicNames
+}
+
+=== tests/cases/conformance/jsxGeneric/file.tsx ===
+/* @jsx-mode generic */
+/* @jsx-intrinsic-factory $JD.createElement */
+
+import * as $JD from "./dom";
+>$JD : typeof $JD
+
+function test() {
+>test : () => HTMLElement
+
+    return <div class="test2" onkeydown={(ev) => { ev.preventDefault(); }}>
+><div class="test2" onkeydown={(ev) => { ev.preventDefault(); }}>                <span/>           </div> : HTMLElement
+>div : any
+>class : string
+>onkeydown : (ev: KeyboardEvent) => void
+>(ev) => { ev.preventDefault(); } : (ev: KeyboardEvent) => void
+>ev : KeyboardEvent
+>ev.preventDefault() : void
+>ev.preventDefault : () => void
+>ev : KeyboardEvent
+>preventDefault : () => void
+
+                <span/>
+><span/> : HTMLElement
+>span : any
+
+           </div>;
+>div : any
+}

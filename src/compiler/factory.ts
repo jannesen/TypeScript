@@ -3600,7 +3600,7 @@ namespace ts {
         );
     }
 
-    function createReactNamespace(reactNamespace: string, parent: JsxOpeningLikeElement | JsxOpeningFragment) {
+    export function createReactNamespace(reactNamespace: string, parent: JsxOpeningLikeElement | JsxOpeningFragment) {
         // To ensure the emit resolver can properly resolve the namespace, we need to
         // treat this identifier as if it were a source tree node by clearing the `Synthesized`
         // flag and setting a parent node.
@@ -3612,7 +3612,7 @@ namespace ts {
         return react;
     }
 
-    function createJsxFactoryExpressionFromEntityName(jsxFactory: EntityName, parent: JsxOpeningLikeElement | JsxOpeningFragment): Expression {
+    export function createJsxFactoryExpressionFromEntityName(jsxFactory: EntityName, parent: JsxOpeningLikeElement | JsxOpeningFragment): Expression {
         if (isQualifiedName(jsxFactory)) {
             const left = createJsxFactoryExpressionFromEntityName(jsxFactory.left, parent);
             const right = createIdentifier(idText(jsxFactory.right));

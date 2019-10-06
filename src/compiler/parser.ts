@@ -713,7 +713,7 @@ namespace ts {
 
         export function parseIsolatedEntityName(content: string, languageVersion: ScriptTarget): EntityName | undefined {
             // Choice of `isDeclarationFile` should be arbitrary
-            initializeState(content, languageVersion, /*syntaxCursor*/ undefined, ScriptKind.JS);
+            initializeState(content, languageVersion, /*syntaxCursor*/ undefined, ScriptKind.Unknown);
             // Prime the scanner.
             nextToken();
             const entityName = parseEntityName(/*allowReservedWords*/ true);
@@ -8048,7 +8048,10 @@ namespace ts {
                     });
                     break;
                 }
-                case "jsx": return; // Accessed directly
+                case "jsx":
+                case "jsx-intrinsic-factory":
+                case "jsx-mode":
+                    return; // Accessed directly
                 default: Debug.fail("Unhandled pragma kind"); // Can this be made into an assertNever in the future?
             }
         });

@@ -2204,6 +2204,10 @@
         "category": "Error",
         "code": 2609
     },
+    "JSX element '{0}' has no children.":  {
+        "category": "Error",
+        "code": 2610
+    },
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
         "code": 2649
@@ -2693,7 +2697,14 @@
         "category": "Error",
         "code": 2773
     },
-
+    "Intrinsic JSX element '{0}' does not exist in factory '{1}'.": {
+        "category": "Error",
+        "code": 2801
+    },
+    "Not supported JSX element.": {
+        "category": "Error",
+        "code": 2802
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -4593,7 +4604,26 @@
         "category": "Error",
         "code": 17017
     },
-
+    "Invalid jsx-mode pragma. Must be react or generic.": {
+        "category": "Error",
+        "code": 17018
+    },
+    "Invalid factory in jsx-intrinsic-factory pragma.": {
+        "category": "Error",
+        "code": 17019
+    },
+    "Invalid factory in jsx pragma.": {
+        "category": "Error",
+        "code": 17020
+    },
+    "No JSX intrinsic factory defined.":  {
+        "category": "Error",
+        "code": 17021
+    },
+    "Invalid JSX intrinsic factory":  {
+        "category": "Error",
+        "code": 17022
+    },
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
         "code": 18000

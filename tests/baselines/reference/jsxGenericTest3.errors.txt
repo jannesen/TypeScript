@@ -1,0 +1,54 @@
+tests/cases/conformance/jsxGeneric/file.tsx(10,10): error TS17022: Invalid JSX intrinsic factory
+tests/cases/conformance/jsxGeneric/file.tsx(11,35): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(tagName: "object" | "div" | "span" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | ... 99 more ... | "wbr", options?: ElementCreationOptions): HTMLElement | ... 70 more ... | HTMLVideoElement', gave the following error.
+    Argument of type 'number | "div" | "span"' is not assignable to parameter of type '"object" | "div" | "span" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr"'.
+      Type 'number' is not assignable to type '"object" | "div" | "span" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr"'.
+  Overload 2 of 3, '(tagName: "listing" | "xmp", options?: ElementCreationOptions): HTMLPreElement', gave the following error.
+    Argument of type 'number | "div" | "span"' is not assignable to parameter of type '"listing" | "xmp"'.
+      Type 'number' is not assignable to type '"listing" | "xmp"'.
+  Overload 3 of 3, '(tagName: string, options?: ElementCreationOptions): HTMLElement', gave the following error.
+    Argument of type 'number | "div" | "span"' is not assignable to parameter of type 'string'.
+      Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/jsxGeneric/file.tsx(15,12): error TS2801: Intrinsic JSX element 'div' does not exist in factory 'createElement'.
+tests/cases/conformance/jsxGeneric/file.tsx(16,17): error TS2801: Intrinsic JSX element 'span' does not exist in factory 'createElement'.
+tests/cases/conformance/jsxGeneric/file.tsx(17,12): error TS2801: Intrinsic JSX element 'div' does not exist in factory 'createElement'.
+
+
+==== tests/cases/conformance/jsxGeneric/file.tsx (5 errors) ====
+    /* @jsx-mode generic */
+    /* @jsx-intrinsic-factory createElement */
+    
+    interface HTMLAttributes {
+        class?:     string;
+        id?:        string;
+        onclick?:   (this: HTMLElement, ev: MouseEvent) => void;
+    }
+     
+    function createElement(tagName:"div"|"span"|number, attrs?: HTMLAttributes, ...children:HTMLElement[]): HTMLElement {
+             ~~~~~~~~~~~~~
+!!! error TS17022: Invalid JSX intrinsic factory
+        return document.createElement(tagName);
+                                      ~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 3, '(tagName: "object" | "div" | "span" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | ... 99 more ... | "wbr", options?: ElementCreationOptions): HTMLElement | ... 70 more ... | HTMLVideoElement', gave the following error.
+!!! error TS2769:     Argument of type 'number | "div" | "span"' is not assignable to parameter of type '"object" | "div" | "span" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr"'.
+!!! error TS2769:       Type 'number' is not assignable to type '"object" | "div" | "span" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr"'.
+!!! error TS2769:   Overload 2 of 3, '(tagName: "listing" | "xmp", options?: ElementCreationOptions): HTMLPreElement', gave the following error.
+!!! error TS2769:     Argument of type 'number | "div" | "span"' is not assignable to parameter of type '"listing" | "xmp"'.
+!!! error TS2769:       Type 'number' is not assignable to type '"listing" | "xmp"'.
+!!! error TS2769:   Overload 3 of 3, '(tagName: string, options?: ElementCreationOptions): HTMLElement', gave the following error.
+!!! error TS2769:     Argument of type 'number | "div" | "span"' is not assignable to parameter of type 'string'.
+!!! error TS2769:       Type 'number' is not assignable to type 'string'.
+    }
+    
+    function test() {
+        return <div class="test">
+               ~~~~~~~~~~~~~~~~~~
+!!! error TS2801: Intrinsic JSX element 'div' does not exist in factory 'createElement'.
+                    <span/>
+                    ~~~~~~~
+!!! error TS2801: Intrinsic JSX element 'span' does not exist in factory 'createElement'.
+               </div>;
+               ~~~~~~
+!!! error TS2801: Intrinsic JSX element 'div' does not exist in factory 'createElement'.
+    }

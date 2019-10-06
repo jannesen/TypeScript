@@ -2409,6 +2409,10 @@ namespace ts {
         return getAssignmentTargetKind(node) !== AssignmentKind.None;
     }
 
+    export function getFullEntityName(entityName: EntityName): string {
+        return (entityName.kind === SyntaxKind.QualifiedName) ? getFullEntityName(entityName.left) + "." + unescapeLeadingUnderscores(entityName.right.escapedText) : unescapeLeadingUnderscores(entityName.escapedText);
+    }
+
     export type NodeWithPossibleHoistedDeclaration =
         | Block
         | VariableStatement
