@@ -614,7 +614,7 @@ namespace ts {
                     cancellationToken = undefined;
                 }
             },
-
+            isTypeIdenticalTo,
             getLocalTypeParametersOfClassOrInterfaceOrTypeAlias,
         };
 
@@ -12191,6 +12191,7 @@ namespace ts {
         ) {
             let result = elaborateElementwise(generateJsxAttributes(node), source, target, relation, containingMessageChain, errorOutputContainer);
             let invalidTextDiagnostic: DiagnosticMessage | undefined;
+
             if (isJsxOpeningElement(node.parent) && isJsxElement(node.parent.parent)) {
                 const containingElement = node.parent.parent;
                 const childPropName = getJsxImplementation(node).getElementChildrenPropertyName();

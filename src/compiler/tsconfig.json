@@ -57,6 +57,7 @@
         "watch.ts",
         "tsbuild.ts",
         "jsx/generic.ts",
-        "jsx/react.ts"
+        "jsx/react.ts",
+        "extensions.ts"
     ]
 }
