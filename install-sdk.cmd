@@ -1,4 +1,4 @@
-@ echo off
+#@ echo off
 pause # Create symbolic links
 
 set VERSION=3.7
@@ -7,6 +7,7 @@ set SDK_ROOT_VERSION=%SDK_ROOT%\%VERSION%
 set TYPESCRIPT_LIB=%~dp0lib
 
 cd %TYPESCRIPT_LIB%
+%~d0
 
 if exist "%SDK_ROOT%\%VERSION%-org" goto org_exists
 move "%SDK_ROOT%\%VERSION%" "%SDK_ROOT%\%VERSION%-org"
