@@ -545,7 +545,7 @@ namespace ts.refactor {
                 return undefined;
             }
 
-            const jsxNamespace = checker.getJsxNamespace(containsJsx);
+            const jsxNamespace = checker.getJsxImplementation(containsJsx).info.getJsxNamespace(containsJsx);
 
             // Strictly speaking, this could resolve to a symbol other than the JSX namespace.
             // This will produce erroneous output (probably, an incorrectly copied import) but

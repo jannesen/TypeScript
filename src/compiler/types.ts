@@ -3398,6 +3398,141 @@ namespace ts {
         readonly unredirected: SourceFile;
     }
 
+    /* @internal */
+    export interface JsxImplementation {
+        info: {
+            getJsxIntrinsicTagNamesAt(location: Node): Symbol[];
+            isJsxIntrinsicIdentifier(tagName: JsxTagNameExpression): boolean;
+            getJsxNamespace(location: Node | undefined): string;
+            getJsxFragmentFactory(location: Node): string | undefined;
+        },
+        checker: {
+            isJsxIntrinsicIdentifier(tagName: JsxTagNameExpression): boolean;
+            checkJsxOpeningLikeElementDeferred(node: JsxElement | JsxSelfClosingElement): void;
+            checkJsxOpeningLikeElement(node: JsxElement | JsxSelfClosingElement, checkMode?: CheckMode): Type
+            checkJsxFragment(node: JsxFragment, checkMode?: CheckMode): Type;
+            checkJsxAttributes(node: JsxAttributes, checkMode: CheckMode | undefined): Type;
+            checkApplicableSignatureForJsxOpeningLikeElement(node: JsxOpeningLikeElement, signature: Signature, relation: ESMap<string, RelationComparisonResult>, checkMode: CheckMode, reportErrors: boolean, containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined, errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean }): boolean;
+            getIntrinsicTagSymbol(node: JsxOpeningLikeElement | JsxClosingElement): Symbol;
+            getEffectiveFirstArgumentForJsxSignature(signature: Signature, node: JsxOpeningLikeElement): Type;
+            getContextualTypeForChildJsxExpression(node: JsxElement, child: JsxChild): Type | undefined;
+            resolveJsxOpeningLikeElement(node: JsxOpeningLikeElement, candidatesOutArray: Signature[] | undefined, checkMode: CheckMode): Signature;
+            elaborateJsxComponents(node: JsxAttributes, source: Type, target: Type, relation: ESMap<string, RelationComparisonResult>, containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined, errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined): boolean;
+            reportErrorResultsDoNotReport(target: Type, errorNode: Node | undefined): boolean;
+        },
+        emit: {
+            sourceFileTransformer(currentSourceFile: SourceFile, context: TransformationContext): SourceFile;
+        }
+    }
+
+    /* @internal */
+    export interface JsxTypeChecker {
+        compilerOptions: CompilerOptions;
+        languageVersion: ScriptTarget;
+        noImplicitAny: boolean;
+        strictNullChecks: boolean;
+        freshObjectLiteralFlag: ObjectFlags | 0;
+        unknownSymbol: TransientSymbol;
+        nullType: IntrinsicType;
+        anyType: IntrinsicType;
+        unknownType: IntrinsicType;
+        neverType: IntrinsicType;
+        errorType: IntrinsicType;
+        stringType: IntrinsicType;
+        emptyJsxObjectType: ResolvedType;
+        anySignature: Signature;
+        assignableRelation: ESMap<string, RelationComparisonResult>;
+        diagnostics: DiagnosticCollection;
+        nodeBuilder: {
+            typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => TypeNode | undefined;
+            symbolToEntityName: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => Identifier | QualifiedName | undefined;
+        };
+        checkDeprecatedSignature(signature: Signature, node: CallLikeExpression): void;
+        checkExpression(node: Expression | QualifiedName, checkMode?: CheckMode, forceTuple?: boolean): Type;
+        checkExpressionCached(node: Expression | QualifiedName, checkMode?: CheckMode): Type;
+        checkExpressionForMutableLocation(node: Expression, checkMode: CheckMode | undefined, contextualType?: Type, forceTuple?: boolean): Type;
+        checkExpressionWithContextualType(node: Expression, contextualType: Type, inferenceContext: InferenceContext | undefined, checkMode: CheckMode): Type;
+        checkGrammarJsxElement(node: JsxOpeningLikeElement): boolean | undefined;
+        checkJsxAttribute(node: JsxAttribute, checkMode?: CheckMode): Type;
+        checkNodeDeferred(node: Node): void;
+        checkSourceElement(node: Node | undefined): void;
+        checkSpreadPropOverrides(type: Type, props: SymbolTable, spread: SpreadAssignment | JsxSpreadAttribute): void;
+        checkTypeAssignableToAndOptionallyElaborate(source: Type, target: Type, errorNode: Node | undefined, expr: Expression | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean;
+        checkTypeRelatedTo(source: Type, target: Type, relation: ESMap<string, RelationComparisonResult>, errorNode: Node | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined, errorOutputContainer?: { errors?: Diagnostic[], skipLogging?: boolean }): boolean;
+        checkTypeRelatedToAndOptionallyElaborate(source: Type, target: Type, relation: ESMap<string, RelationComparisonResult>, errorNode: Node | undefined, expr: Expression | undefined, headMessage: DiagnosticMessage | undefined, containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined, errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined): boolean;
+        createAnonymousType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: readonly Signature[], constructSignatures: readonly Signature[], stringIndexInfo: IndexInfo | undefined, numberIndexInfo: IndexInfo | undefined): ResolvedType
+        createArrayType(elementType: Type, readonly?: boolean): ObjectType;
+        createSignature(declaration: SignatureDeclaration | JSDocSignature | undefined, typeParameters: readonly TypeParameter[] | undefined, thisParameter: Symbol | undefined, parameters: readonly Symbol[], resolvedReturnType: Type | undefined, resolvedTypePredicate: TypePredicate | undefined, minArgumentCount: number, flags: SignatureFlags): Signature
+        createSymbol(flags: SymbolFlags, name: __String, checkFlags?: CheckFlags): TransientSymbol;
+        createTupleType(elementTypes: readonly Type[], elementFlags: readonly ElementFlags[] | undefined, readonly: boolean, namedMemberDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[]): Type;
+        createTypeReference(target: GenericType, typeArguments: readonly Type[] | undefined): TypeReference;
+        elaborateElementwise(iterator: ElaborationIterator, source: Type, target: Type, relation: ESMap<string, RelationComparisonResult>, containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined, errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined): boolean;
+        error(location: Node | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic;
+        fillMissingTypeArguments(typeArguments: readonly Type[], typeParameters: readonly TypeParameter[] | undefined, minTypeArgumentCount: number, isJavaScriptImplicitAny: boolean): Type[];
+        fillMissingTypeArguments(typeArguments: readonly Type[] | undefined, typeParameters: readonly TypeParameter[] | undefined, minTypeArgumentCount: number, isJavaScriptImplicitAny: boolean): Type[] | undefined;
+        filterType(type: Type, f: (t: Type) => boolean): Type;
+        forEachType<T>(type: Type, f: (t: Type) => T | undefined): T | undefined;
+        getApparentType(type: Type): Type;
+        getApparentTypeOfContextualType(node: Expression | MethodDeclaration, contextFlags?: ContextFlags): Type | undefined;
+        getDeclaredTypeOfSymbol(symbol: Symbol): Type;
+        getExportsOfSymbol(symbol: Symbol): SymbolTable;
+        getGlobalSymbol(name: __String, meaning: SymbolFlags, diagnostic: DiagnosticMessage | undefined): Symbol | undefined;
+        getIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined;
+        getIndexedAccessType(objectType: Type, indexType: Type, noUncheckedIndexedAccessCandidate: boolean | undefined, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined, accessFlags: AccessFlags): Type;
+        getIntersectionType(types: readonly Type[], aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type;
+        getLiteralType(value: string | number | PseudoBigInt, enumId?: number, symbol?: Symbol): LiteralType;
+        getLiteralType(value: string): StringLiteralType;
+        getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): TypeParameter[] | undefined;
+        getMergedSymbol(symbol: Symbol): Symbol;
+        getMergedSymbol(symbol: Symbol | undefined): Symbol | undefined;
+        getMinArgumentCount(signature: Signature, flags?: MinArgumentCountFlags): number;
+        getMinTypeArgumentCount(typeParameters: readonly TypeParameter[] | undefined): number;
+        getNodeLinks(node: Node): NodeLinks;
+        getOrCreateTypeFromSignature(signature: Signature): ObjectType;
+        getParameterCount(signature: Signature): number;
+        getPropertiesOfType(type: Type): Symbol[]
+        getPropertyOfType(type: Type, name: __String, skipObjectFunctionPropertyAugment?: boolean): Symbol | undefined;
+        getReducedType(type: Type): Type;
+        getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[] | undefined, checkMode?: CheckMode): Signature;
+        getReturnTypeOfSignature(signature: Signature): Type;
+        getSignaturesOfType(type: Type, kind: SignatureKind): readonly Signature[];
+        getSpreadType(left: Type, right: Type, symbol: Symbol | undefined, objectFlags: ObjectFlags, readonly: boolean): Type;
+        getSymbol(symbols: SymbolTable, name: __String, meaning: SymbolFlags): Symbol | undefined;
+        getSymbolAtLocation(node: Node, ignoreErrors?: boolean): Symbol | undefined;
+        getSymbolLinks(symbol: Symbol): SymbolLinks;
+        getTypeAliasInstantiation(symbol: Symbol, typeArguments: readonly Type[] | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type;
+        getTypeAtPosition(signature: Signature, pos: number): Type;
+        getTypeOfFirstParameterOfSignatureWithFallback(signature: Signature, fallbackType: Type): Type;
+        getTypeOfPropertyOfContextualType(type: Type, name: __String): Type | undefined;
+        getTypeOfPropertyOfType(type: Type, name: __String): Type | undefined;
+        getTypeOfSymbol(symbol: Symbol): Type;
+        getTypeOnlyAliasDeclaration(symbol: Symbol): TypeOnlyCompatibleAliasDeclaration | undefined;
+        getUnionSignatures(signatureLists: readonly (readonly Signature[])[]): Signature[];
+        getUnionType(types: readonly Type[], unionReduction: UnionReduction, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], origin?: Type): Type;
+        hasEffectiveRestParameter(signature: Signature): boolean;
+        intersectTypes(type1: Type, type2: Type): Type;
+        intersectTypes(type1: Type | undefined, type2: Type | undefined): Type | undefined;
+        isArrayLikeType(type: Type): boolean;
+        isArrayOrTupleLikeType(type: Type): boolean;
+        isTupleLikeType(type: Type): boolean;
+        isTypeAny(type: Type | undefined): boolean | undefined;
+        isTypeRelatedTo(source: Type, target: Type, relation: ESMap<string, RelationComparisonResult>): boolean;
+        isUntypedFunctionCall(funcType: Type, apparentFuncType: Type, numCallSignatures: number, numConstructSignatures: number): boolean;
+        isValidSpreadType(type: Type): boolean;
+        mapType(type: Type, mapper: (t: Type) => Type | undefined, noReductions?: boolean): Type | undefined;
+        mapType(type: Type, mapper: (t: Type) => Type, noReductions?: boolean): Type;
+        markAliasSymbolAsReferenced(symbol: Symbol): void;
+        resolveCall(node: CallLikeExpression, signatures: readonly Signature[], candidatesOutArray: Signature[] | undefined, checkMode: CheckMode, callChainFlags: SignatureFlags, fallbackError?: DiagnosticMessage): Signature;
+        resolveEntityName(name: EntityNameOrEntityNameExpression, meaning: SymbolFlags, ignoreErrors?: boolean, dontResolveAlias?: boolean, location?: Node): Symbol | undefined;
+        resolveErrorCall(node: CallLikeExpression): Signature;
+        resolveExternalModule(location: Node, moduleReference: string, moduleNotFoundError: DiagnosticMessage | undefined, errorNode: Node, isForAugmentation: boolean): Symbol | undefined;
+        resolveName(location: Node | undefined, name: __String, meaning: SymbolFlags, nameNotFoundMessage: DiagnosticMessage | undefined, nameArg: __String | Identifier | undefined, isUse: boolean, excludeGlobals: boolean, suggestedNameNotFoundMessage?: DiagnosticMessage): Symbol | undefined;
+        resolveSymbol(symbol: Symbol, dontResolveAlias?: boolean): Symbol;
+        resolveSymbol(symbol: Symbol | undefined, dontResolveAlias?: boolean): Symbol | undefined;
+        resolveUntypedCall(node: CallLikeExpression): Signature;
+        typeToString(type: Type, enclosingDeclaration: Node | undefined, flags: TypeFormatFlags, writer: EmitTextWriter): string;
+    }
+
     // Source files are declarations when they are external modules.
     export interface SourceFile extends Declaration {
         readonly kind: SyntaxKind.SourceFile;
@@ -4207,8 +4342,7 @@ namespace ts {
          */
         /* @internal */ getAllPossiblePropertiesOfTypes(type: readonly Type[]): Symbol[];
         /* @internal */ resolveName(name: string, location: Node | undefined, meaning: SymbolFlags, excludeGlobals: boolean): Symbol | undefined;
-        /* @internal */ getJsxNamespace(location?: Node): string;
-        /* @internal */ getJsxFragmentFactory(location: Node): string | undefined;
+        /* @internal */ getJsxImplementation(location: Node): JsxImplementation;
 
         /**
          * Note that this will return undefined in the following case:
@@ -4611,8 +4745,7 @@ namespace ts {
         getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): string[] | undefined;
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[] | undefined;
         isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
-        getJsxFactoryEntity(location?: Node): EntityName | undefined;
-        getJsxFragmentFactoryEntity(location?: Node): EntityName | undefined;
+        getJsxImplementation(location: Node): JsxImplementation;
         getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
         getSymbolOfExternalModuleSpecifier(node: StringLiteralLike): Symbol | undefined;
         isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement): boolean;
@@ -5485,13 +5618,6 @@ namespace ts {
     export interface SubstitutionType extends InstantiableType {
         baseType: Type;     // Target type
         substitute: Type;   // Type to substitute for type parameter
-    }
-
-    /* @internal */
-    export const enum JsxReferenceKind {
-        Component,
-        Function,
-        Mixed
     }
 
     export const enum SignatureKind {
@@ -8287,5 +8413,4 @@ namespace ts {
 
     /* @internal */
     export type ElaborationIterator = IterableIterator<{ errorNode: Node, innerExpression: Expression | undefined, nameType: Type, errorMessage?: DiagnosticMessage | undefined }>;
-
 }

@@ -96,7 +96,7 @@ namespace Harness {
             const p = node.parent;
             if (!(ts.isJsxOpeningElement(p) || ts.isJsxClosingElement(p) || ts.isJsxSelfClosingElement(p))) return false;
             if (p.tagName !== node) return false;
-            return ts.jsxutil.isJsxIntrinsicIdentifier(p.tagName);
+            return this.checker.getJsxImplementation(p).info.isJsxIntrinsicIdentifier(p.tagName);
         }
 
         private writeTypeOrSymbol(node: ts.Node, isSymbolWalk: boolean): TypeWriterResult | undefined {

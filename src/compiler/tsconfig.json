@@ -78,6 +78,7 @@
         "watchPublic.ts",
         "tsbuild.ts",
         "tsbuildPublic.ts",
+        "jsx/react.ts",
         "jsx/jsxutil.ts"
     ]
 }
