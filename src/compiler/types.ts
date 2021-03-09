@@ -8257,4 +8257,35 @@ namespace ts {
         negative: boolean;
         base10Value: string;
     }
+
+    /* @internal */
+    export const enum CheckMode {
+        Normal = 0,                     // Normal type checking
+        Contextual = 1 << 0,            // Explicitly assigned contextual type, therefore not cacheable
+        Inferential = 1 << 1,           // Inferential typing
+        SkipContextSensitive = 1 << 2,  // Skip context sensitive function expressions
+        SkipGenericFunctions = 1 << 3,  // Skip single signature generic functions
+        IsForSignatureHelp = 1 << 4,    // Call resolution for purposes of signature help
+    }
+
+    /* @internal */
+    export const enum AccessFlags {
+        None = 0,
+        NoIndexSignatures = 1 << 0,
+        Writing = 1 << 1,
+        CacheSymbol = 1 << 2,
+        NoTupleBoundsCheck = 1 << 3,
+        ExpressionPosition = 1 << 4,
+    }
+
+    /* @internal */
+    export const enum MinArgumentCountFlags {
+        None = 0,
+        StrongArityForUntypedJS = 1 << 0,
+        VoidIsNonOptional = 1 << 1,
+    }
+
+    /* @internal */
+    export type ElaborationIterator = IterableIterator<{ errorNode: Node, innerExpression: Expression | undefined, nameType: Type, errorMessage?: DiagnosticMessage | undefined }>;
+
 }
