@@ -509,9 +509,12 @@ namespace ts.codefix {
 
         // The error wasn't for the symbolAtLocation, it was for the JSX tag itself, which needs access to e.g. `React`.
         const { parent } = token;
-        return (isJsxOpeningLikeElement(parent) && parent.tagName === token) || isJsxOpeningFragment(parent)
-            ? tryCast(checker.resolveName(checker.getJsxImplementation(parent).info.getJsxNamespace(parent), isJsxOpeningLikeElement(parent) ? token : parent, SymbolFlags.Value, /*excludeGlobals*/ false), isUMDExportSymbol)
-            : undefined;
+        if ((isJsxOpeningLikeElement(parent) && parent.tagName === token) || isJsxOpeningFragment(parent)) {
+            const jsxNamespace = checker.getJsxImplementation(parent).info.getJsxNamespace(parent);
+            if (jsxNamespace) {
+                return tryCast(checker.resolveName(jsxNamespace, isJsxOpeningLikeElement(parent) ? token : parent, SymbolFlags.Value, /*excludeGlobals*/ false), isUMDExportSymbol);
+            }
+        }
     }
 
     function getUmdImportKind(importingFile: SourceFile, compilerOptions: CompilerOptions): ImportKind {
@@ -562,7 +565,7 @@ namespace ts.codefix {
         if ((isJsxOpeningLikeElement(parent) || isJsxClosingElement(parent)) && parent.tagName === symbolToken) {
             const jsxImp = checker.getJsxImplementation(sourceFile).info;
             const jsxNamespace = jsxImp.getJsxNamespace(sourceFile);
-            if (jsxImp.isJsxIntrinsicIdentifier(symbolToken) || !checker.resolveName(jsxNamespace, parent, SymbolFlags.Value, /*excludeGlobals*/ true)) {
+            if (jsxNamespace && (jsxImp.isJsxIntrinsicIdentifier(symbolToken) || !checker.resolveName(jsxNamespace, parent, SymbolFlags.Value, /*excludeGlobals*/ true))) {
                 return jsxNamespace;
             }
         }

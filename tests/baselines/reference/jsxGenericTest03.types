@@ -1,0 +1,46 @@
+=== tests/cases/conformance/jsxGeneric/file.tsx ===
+/* @jsx-mode generic */
+/* @jsx-intrinsic-factory createElement */
+
+interface HTMLAttributes {
+    class?:     string;
+>class : string
+
+    id?:        string;
+>id : string
+
+    onclick?:   (this: HTMLElement, ev: MouseEvent) => void;
+>onclick : (this: HTMLElement, ev: MouseEvent) => void
+>this : HTMLElement
+>ev : MouseEvent
+}
+ 
+function createElement(tagName:"div"|"span"|number, attrs?: HTMLAttributes, ...children:HTMLElement[]): HTMLElement {
+>createElement : (tagName: "div" | "span" | number, attrs?: HTMLAttributes, ...children: HTMLElement[]) => HTMLElement
+>tagName : number | "div" | "span"
+>attrs : HTMLAttributes
+>children : HTMLElement[]
+
+    return document.createElement(tagName);
+>document.createElement(tagName) : HTMLElement | HTMLObjectElement | HTMLDivElement | HTMLSpanElement | HTMLAnchorElement | HTMLAppletElement | HTMLAreaElement | HTMLAudioElement | HTMLBaseElement | HTMLBaseFontElement | HTMLQuoteElement | HTMLBodyElement | HTMLBRElement | HTMLButtonElement | HTMLCanvasElement | HTMLTableCaptionElement | HTMLTableColElement | HTMLDataElement | HTMLDataListElement | HTMLModElement | HTMLDetailsElement | HTMLDialogElement | HTMLDirectoryElement | HTMLDListElement | HTMLEmbedElement | HTMLFieldSetElement | HTMLFontElement | HTMLFormElement | HTMLFrameElement | HTMLFrameSetElement | HTMLHeadingElement | HTMLHeadElement | HTMLHRElement | HTMLHtmlElement | HTMLIFrameElement | HTMLImageElement | HTMLInputElement | HTMLLabelElement | HTMLLegendElement | HTMLLIElement | HTMLLinkElement | HTMLMapElement | HTMLMarqueeElement | HTMLMenuElement | HTMLMetaElement | HTMLMeterElement | HTMLOListElement | HTMLOptGroupElement | HTMLOptionElement | HTMLOutputElement | HTMLParagraphElement | HTMLParamElement | HTMLPictureElement | HTMLPreElement | HTMLProgressElement | HTMLScriptElement | HTMLSelectElement | HTMLSlotElement | HTMLSourceElement | HTMLStyleElement | HTMLTableElement | HTMLTableSectionElement | HTMLTableDataCellElement | HTMLTemplateElement | HTMLTextAreaElement | HTMLTableHeaderCellElement | HTMLTimeElement | HTMLTitleElement | HTMLTableRowElement | HTMLTrackElement | HTMLUListElement | HTMLVideoElement
+>document.createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; }
+>document : Document
+>createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; }
+>tagName : number | "div" | "span"
+}
+
+function test() {
+>test : () => any
+
+    return <div class="test">
+><div class="test">                <span/>           </div> : any
+>div : any
+>class : string
+
+                <span/>
+><span/> : any
+>span : any
+
+           </div>;
+>div : any
+}

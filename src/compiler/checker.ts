@@ -943,6 +943,7 @@ namespace ts {
         const typeofType = createTypeofType();
 
         let _jsxiReact: JsxImplementation | undefined;
+        let _jsxiGeneric: JsxImplementation | undefined;
         let outofbandVarianceMarkerHandler: ((onlyUnreliable: boolean) => void) | undefined;
 
         const subtypeRelation = new Map<string, RelationComparisonResult>();
@@ -961,12 +962,39 @@ namespace ts {
 
         // getJsxDefinitions for Node. Check if jsxInterface is already created (in relation to sourcefile).
         // If not construct a jsxInterface.
-        function getJsxImplementation(_location: Node | undefined) {
-            if (!_jsxiReact) {
-                _jsxiReact = jsxi_react(getTypeChecker());
+        function getJsxImplementation(location: Node | undefined) {
+            if (location) {
+                const sourceFile = getSourceFileOfNode(location);
+                const jsxPragmaMode = sourceFile.pragmas.get("jsx-mode");
+
+                if (jsxPragmaMode) {
+                    const chosenpragma: any = isArray(jsxPragmaMode) ? jsxPragmaMode[0] : jsxPragmaMode;
+                    switch (chosenpragma.arguments.mode) {
+                    case "react":   return get_react();
+                    case "generic": return get_generic();
+                    default:
+                        error(sourceFile, Diagnostics.Invalid_jsx_mode_pragma_Must_be_react_or_generic);
+                        return get_generic();
+                    }
+                }
             }
 
-            return _jsxiReact;
+            return get_react();
+
+            function get_react() {
+                if (!_jsxiReact) {
+                    _jsxiReact= jsxi_react(getTypeChecker());
+                }
+
+                return _jsxiReact;
+            }
+            function get_generic() {
+                if (!_jsxiGeneric) {
+                    _jsxiGeneric = jsxi_generic(getTypeChecker());
+                }
+
+                return _jsxiGeneric;
+            }
 
             function getTypeChecker(): JsxTypeChecker {
                 return {
@@ -984,8 +1012,10 @@ namespace ts {
                     stringType,
                     emptyJsxObjectType,
                     anySignature,
+                    unknownSignature,
                     assignableRelation,
                     diagnostics,
+                    factory,
                     nodeBuilder,
                     checkDeprecatedSignature,
                     checkExpression,
@@ -1038,6 +1068,7 @@ namespace ts {
                     getSymbolAtLocation,
                     getSymbolLinks,
                     getTypeAliasInstantiation,
+                    getTypeArguments,
                     getTypeAtPosition,
                     getTypeOfFirstParameterOfSignatureWithFallback,
                     getTypeOfPropertyOfContextualType,
@@ -1050,6 +1081,7 @@ namespace ts {
                     intersectTypes,
                     isArrayLikeType,
                     isArrayOrTupleLikeType,
+                    isArrayType,
                     isTupleLikeType,
                     isTypeAny,
                     isTypeRelatedTo,
@@ -1064,6 +1096,8 @@ namespace ts {
                     resolveName,
                     resolveSymbol,
                     resolveUntypedCall,
+                    signatureHasRestParameter,
+                    setEntityReferenced,
                     typeToString
                 };
             }
@@ -1074,6 +1108,21 @@ namespace ts {
             // emitter questions of this resolver will return the right information.
             getDiagnostics(sourceFile, cancellationToken);
             return emitResolver;
+        }
+
+        function setEntityReferenced(sourceFile: SourceFile, entityName: EntityName, flags: SymbolFlags): void {
+            if (entityName.kind === SyntaxKind.QualifiedName) {
+                setEntityReferenced(sourceFile, entityName.left, SymbolFlags.All);
+            }
+
+            const symbol = resolveEntityName(entityName, flags, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, sourceFile);
+            if (symbol) {
+                symbol.isReferenced = SymbolFlags.All;
+
+                if (symbol.flags & SymbolFlags.Alias && !isConstEnumOrConstEnumOnlyModule(resolveAlias(symbol))) {
+                    markAliasSymbolAsReferenced(symbol);
+                }
+            }
         }
 
         function lookupOrIssueError(location: Node | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {

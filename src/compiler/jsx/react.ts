@@ -420,7 +420,7 @@ namespace ts {
                         if (jsxFragmentPragma) {
                             const chosenPragma = isArray(jsxFragmentPragma) ? jsxFragmentPragma[0] : jsxFragmentPragma;
                             file.localJsxFragmentFactory = parseIsolatedEntityName(chosenPragma.arguments.factory, typeChecker.languageVersion);
-                            visitNode(file.localJsxFragmentFactory, markAsSynthetic);
+                            visitNode(file.localJsxFragmentFactory, jsxutil.markAsSynthetic);
                             if (file.localJsxFragmentFactory) {
                                 return file.localJsxFragmentNamespace = getFirstIdentifier(file.localJsxFragmentFactory).escapedText;
                             }
@@ -439,7 +439,7 @@ namespace ts {
                         if (jsxPragma) {
                             const chosenPragma = isArray(jsxPragma) ? jsxPragma[0] : jsxPragma;
                             file.localJsxFactory = parseIsolatedEntityName(chosenPragma.arguments.factory, typeChecker.languageVersion);
-                            visitNode(file.localJsxFactory, markAsSynthetic);
+                            visitNode(file.localJsxFactory, jsxutil.markAsSynthetic);
                             if (file.localJsxFactory) {
                                 return file.localJsxNamespace = getFirstIdentifier(file.localJsxFactory).escapedText;
                             }
@@ -451,7 +451,7 @@ namespace ts {
                 _jsxNamespace = "React" as __String;
                 if (typeChecker.compilerOptions.jsxFactory) {
                     _jsxFactoryEntity = parseIsolatedEntityName(typeChecker.compilerOptions.jsxFactory, typeChecker.languageVersion);
-                    visitNode(_jsxFactoryEntity, markAsSynthetic);
+                    visitNode(_jsxFactoryEntity, jsxutil.markAsSynthetic);
                     if (_jsxFactoryEntity) {
                         _jsxNamespace = getFirstIdentifier(_jsxFactoryEntity).escapedText;
                     }
@@ -464,11 +464,6 @@ namespace ts {
                 _jsxFactoryEntity = factory.createQualifiedName(factory.createIdentifier(unescapeLeadingUnderscores(_jsxNamespace)), "createElement");
             }
             return _jsxNamespace;
-
-            function markAsSynthetic(node: Node): VisitResult<Node> {
-                setTextRangePosEnd(node, -1, -1);
-                return visitEachChild(node, markAsSynthetic, nullTransformationContext);
-            }
         }
 
         function *generateJsxAttributes(node: JsxAttributes): ElaborationIterator {
@@ -1123,7 +1118,7 @@ namespace ts {
 
 
         //----------------------------
-        // Checker interface methods
+        // Emit interface methods
         //----------------------------
 
         function sourceFileTransformer(currentSourceFile: SourceFile, context: TransformationContext) {

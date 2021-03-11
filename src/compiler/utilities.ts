@@ -7117,4 +7117,8 @@ namespace ts {
     export function containsIgnoredPath(path: string) {
         return some(ignoredPaths, p => stringContains(path, p));
     }
+
+    export function getFullEntityName(entityName: EntityName): string {
+        return (entityName.kind === SyntaxKind.QualifiedName) ? getFullEntityName(entityName.left) + "." + unescapeLeadingUnderscores(entityName.right.escapedText) : unescapeLeadingUnderscores(entityName.escapedText);
+    }
 }

@@ -1,0 +1,41 @@
+tests/cases/conformance/jsxGeneric/file.tsx(25,17): error TS2322: Type '(number | HTMLElement)[]' is not assignable to type 'AddNode'.
+  Type '(number | HTMLElement)[]' is not assignable to type 'AddArray'.
+    The types returned by 'pop()' are incompatible between these types.
+      Type 'number | HTMLElement' is not assignable to type 'AddNode'.
+        Type 'number' is not assignable to type 'AddNode'.
+
+
+==== tests/cases/conformance/jsxGeneric/file.tsx (1 errors) ====
+    /* @jsx-mode generic */
+    /* @jsx-intrinsic-factory createElement */
+    
+    interface HTMLAttributes {
+        class?:     string;
+        id?:        string;
+        onclick?:   (this: HTMLElement, ev: MouseEvent) => void;
+    }
+    
+    export interface AddArray extends Array<AddNode> {}
+    export type AddNode    = HTMLElement|string|AddArray|false;
+    
+    function createElement(tagName:"div"|"span", attrs?: HTMLAttributes, ...children:AddNode[]): HTMLElement {
+        return document.createElement(tagName);
+    }
+    
+    function test() {
+        const f = <>
+                    <span>1</span>
+                    { 10 }
+                  </>;
+    
+        return <div class="test">
+                    <span/>
+                    { f }
+                    ~~~~~
+!!! error TS2322: Type '(number | HTMLElement)[]' is not assignable to type 'AddNode'.
+!!! error TS2322:   Type '(number | HTMLElement)[]' is not assignable to type 'AddArray'.
+!!! error TS2322:     The types returned by 'pop()' are incompatible between these types.
+!!! error TS2322:       Type 'number | HTMLElement' is not assignable to type 'AddNode'.
+!!! error TS2322:         Type 'number' is not assignable to type 'AddNode'.
+               </div>;
+    }
