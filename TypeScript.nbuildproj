@@ -9,6 +9,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'" Label="Configuration">
   </PropertyGroup>
   <Import Project="$(NBuildProjectBuild)NBuildProject.props" />
+  <Import Project="TypeScript.props" />  
   <ItemGroup>
     <File Include="*" />
     <File Include="doc\**\*" />
