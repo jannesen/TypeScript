@@ -3971,7 +3971,7 @@ namespace ts {
          */
         getTypeChecker(): TypeChecker;
 
-        /* @internal */ getCommonSourceDirectory(): string;
+        getCommonSourceDirectory(): string;
 
         // For testing purposes only.  Should not be used by any other consumers (including the
         // language service).
@@ -4259,7 +4259,7 @@ namespace ts {
         /* @internal */ getImmediateAliasedSymbol(symbol: Symbol): Symbol | undefined;
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
         /** Unlike `getExportsOfModule`, this includes properties of an `export =` value. */
-        /* @internal */ getExportsAndPropertiesOfModule(moduleSymbol: Symbol): Symbol[];
+        getExportsAndPropertiesOfModule(moduleSymbol: Symbol): Symbol[];
         getJsxIntrinsicTagNamesAt(location: Node): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
         getAmbientModules(): Symbol[];
@@ -4386,6 +4386,7 @@ namespace ts {
 
         /* @internal */ getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): readonly TypeParameter[] | undefined;
         /* @internal */ isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean;
+        isTypeIdenticalTo(source: Type, target: Type): boolean;
     }
 
     /* @internal */
