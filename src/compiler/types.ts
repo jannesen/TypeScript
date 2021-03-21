@@ -3973,6 +3973,9 @@ namespace ts {
 
         getCommonSourceDirectory(): string;
 
+        getCanonicalFileName(fileName: string): string;
+        getReferencedFiles(sourceFile: SourceFile): Set<Path> | undefined;
+
         // For testing purposes only.  Should not be used by any other consumers (including the
         // language service).
         /* @internal */ getDiagnosticsProducingTypeChecker(): TypeChecker;

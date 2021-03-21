@@ -170,7 +170,7 @@ namespace ts {
      * Create the state so that we can iterate on changedFiles/affected files
      */
     function createBuilderProgramState(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<ReusableBuilderProgramState>): BuilderProgramState {
-        const state = BuilderState.create(newProgram, getCanonicalFileName, oldState) as BuilderProgramState;
+        const state = BuilderState.create(newProgram, oldState) as BuilderProgramState;
         state.program = newProgram;
         const compilerOptions = newProgram.getCompilerOptions();
         state.compilerOptions = compilerOptions;
