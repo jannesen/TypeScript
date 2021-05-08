@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Include this file in your visualstudio project file and
+    IntelliSense wil use this version of TypeScript.
+-->
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TypeScriptToolsVersion>4.2</TypeScriptToolsVersion>

@@ -36,3 +36,8 @@ Dockerfile
 .eslintrc.json
 .yarnrc
 tmp
+.vs/
+gulp.cmd
+gulp-buildjs.nbconfig
+TypeScript.sln
+TypeScript.nbuildproj

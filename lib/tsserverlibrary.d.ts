@@ -2080,6 +2080,9 @@ declare namespace ts {
          * Gets a type checker that can be used to semantically analyze source files in the program.
          */
         getTypeChecker(): TypeChecker;
+        getCommonSourceDirectory(): string;
+        getCanonicalFileName(fileName: string): string;
+        getReferencedFiles(sourceFile: SourceFile): Set<Path> | undefined;
         getTypeCatalog(): readonly Type[];
         getNodeCount(): number;
         getIdentifierCount(): number;
@@ -2226,6 +2229,8 @@ declare namespace ts {
         /** Follow all aliases to get the original symbol. */
         getAliasedSymbol(symbol: Symbol): Symbol;
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
+        /** Unlike `getExportsOfModule`, this includes properties of an `export =` value. */
+        getExportsAndPropertiesOfModule(moduleSymbol: Symbol): Symbol[];
         getJsxIntrinsicTagNamesAt(location: Node): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
         getAmbientModules(): Symbol[];
@@ -2239,6 +2244,7 @@ declare namespace ts {
          * and the operation is cancelled, then it should be discarded, otherwise it is safe to keep.
          */
         runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
+        isTypeIdenticalTo(source: Type, target: Type): boolean;
     }
     export enum NodeBuilderFlags {
         None = 0,

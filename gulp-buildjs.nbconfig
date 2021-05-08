@@ -10,4 +10,4 @@
 	<logfilter regex="^(?&lt;file&gt;[A-Za-z0-9 _\-\+\=\[\]\{\}\:\!\@\#\$\%\^\&amp;\*\(\)\.\,\`\:\;\\\/]+)\((?&lt;lineno&gt;[0-9]+),(?&lt;colno&gt;[0-9]+)\): (?&lt;msg&gt;.*)$"											warning="1"	         	/>
 	<logfilter regex="^(?&lt;file&gt;[A-Za-z0-9 _\-\+\=\[\]\{\}\:\!\@\#\$\%\^\&amp;\*\(\)\.\,\`\:\;\\\/]+): (?&lt;msg&gt;.*)$"																							warning="1"	         	/>
 </processbuild-config>
-http://devcloud/svn/jlib/trunk/OpenSoftware/TypeScript/jake-buildjs.config
+
