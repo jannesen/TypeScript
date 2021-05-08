@@ -171,24 +171,6 @@ namespace ts {
         ResolvedBaseTypes,
     }
 
-    const enum CheckMode {
-        Normal = 0,                     // Normal type checking
-        Contextual = 1 << 0,            // Explicitly assigned contextual type, therefore not cacheable
-        Inferential = 1 << 1,           // Inferential typing
-        SkipContextSensitive = 1 << 2,  // Skip context sensitive function expressions
-        SkipGenericFunctions = 1 << 3,  // Skip single signature generic functions
-        IsForSignatureHelp = 1 << 4,    // Call resolution for purposes of signature help
-    }
-
-    const enum AccessFlags {
-        None = 0,
-        NoIndexSignatures = 1 << 0,
-        Writing = 1 << 1,
-        CacheSymbol = 1 << 2,
-        NoTupleBoundsCheck = 1 << 3,
-        ExpressionPosition = 1 << 4,
-    }
-
     const enum SignatureCheckMode {
         BivariantCallback = 1 << 0,
         StrictCallback    = 1 << 1,
@@ -250,12 +232,6 @@ namespace ts {
         ExportValue = 1 << 0,
         ExportType = 1 << 1,
         ExportNamespace = 1 << 2,
-    }
-
-    const enum MinArgumentCountFlags {
-        None = 0,
-        StrongArityForUntypedJS = 1 << 0,
-        VoidIsNonOptional = 1 << 1,
     }
 
     const enum IntrinsicTypeKind {
@@ -16593,7 +16569,6 @@ namespace ts {
             }
         }
 
-        type ElaborationIterator = IterableIterator<{ errorNode: Node, innerExpression: Expression | undefined, nameType: Type, errorMessage?: DiagnosticMessage | undefined }>;
         /**
          * For every element returned from the iterator, checks that element to issue an error on a property of that element's type
          * If that element would issue an error, we first attempt to dive into that element's inner expression and issue a more specific error by recuring into `elaborateError`
@@ -17764,11 +17739,7 @@ namespace ts {
                             reportError(Diagnostics.The_Object_type_is_assignable_to_very_few_other_types_Did_you_mean_to_use_the_any_type_instead);
                         }
                         else if (isComparingJsxAttributes && target.flags & TypeFlags.Intersection) {
-                            const targetTypes = (target as IntersectionType).types;
-                            const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes, errorNode);
-                            const intrinsicClassAttributes = getJsxType(JsxNames.IntrinsicClassAttributes, errorNode);
-                            if (intrinsicAttributes !== errorType && intrinsicClassAttributes !== errorType &&
-                                (contains(targetTypes, intrinsicAttributes) || contains(targetTypes, intrinsicClassAttributes))) {
+                            if (reportErrorResultsDoNotReport(target, errorNode)) {
                                 // do not report top error
                                 return result;
                             }
@@ -19458,6 +19429,14 @@ namespace ts {
 
                 return false;
             }
+        }
+
+        function reportErrorResultsDoNotReport(target: Type, errorNode: Node | undefined): boolean {
+            const targetTypes = (target as IntersectionType).types;
+            const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes, errorNode);
+            const intrinsicClassAttributes = getJsxType(JsxNames.IntrinsicClassAttributes, errorNode);
+            return intrinsicAttributes !== errorType && intrinsicClassAttributes !== errorType &&
+                    (contains(targetTypes, intrinsicAttributes) || contains(targetTypes, intrinsicClassAttributes));
         }
 
         function typeCouldHaveTopLevelSingletonTypes(type: Type): boolean {
@@ -25627,7 +25606,7 @@ namespace ts {
         }
 
         function getStaticTypeOfReferencedJsxConstructor(context: JsxOpeningLikeElement) {
-            if (isJsxIntrinsicIdentifier(context.tagName)) {
+            if (jsxutil.isJsxIntrinsicIdentifier(context.tagName)) {
                 const result = getIntrinsicAttributesTypeFromJsxOpeningLikeElement(context);
                 const fakeSignature = createSignatureForJSXIntrinsic(context, result);
                 return getOrCreateTypeFromSignature(fakeSignature);
@@ -26308,38 +26287,36 @@ namespace ts {
                 type.flags & TypeFlags.UnionOrIntersection && every((<UnionOrIntersectionType>type).types, isValidSpreadType));
         }
 
-        function checkJsxSelfClosingElementDeferred(node: JsxSelfClosingElement) {
-            checkJsxOpeningLikeElementOrOpeningFragment(node);
-        }
+        function checkJsxOpeningLikeElementDeferred(node: JsxElement | JsxSelfClosingElement) {
+            const openingElement = isJsxElement(node) ? node.openingElement : node;
+            checkGrammarJsxElement(openingElement);
+            checkJsxPreconditions(openingElement);
 
-        function checkJsxSelfClosingElement(node: JsxSelfClosingElement, _checkMode: CheckMode | undefined): Type {
-            checkNodeDeferred(node);
-            return getJsxElementTypeAt(node) || anyType;
-        }
+            const sig = getResolvedSignature(openingElement);
+            checkDeprecatedSignature(sig, openingElement);
+            checkJsxReturnAssignableToAppropriateBound(getJsxReferenceKind(openingElement), getReturnTypeOfSignature(sig), openingElement);
 
-        function checkJsxElementDeferred(node: JsxElement) {
-            // Check attributes
-            checkJsxOpeningLikeElementOrOpeningFragment(node.openingElement);
+            if (isJsxElement(node)) {
+                const closingElement = node.closingElement;
+                // Perform resolution on the closing tag so that rename/go to definition/etc work
+                if (jsxutil.isJsxIntrinsicIdentifier(closingElement.tagName)) {
+                    getIntrinsicTagSymbol(closingElement);
+                }
+                else {
+                    checkExpression(closingElement.tagName);
+                }
 
-            // Perform resolution on the closing tag so that rename/go to definition/etc work
-            if (isJsxIntrinsicIdentifier(node.closingElement.tagName)) {
-                getIntrinsicTagSymbol(node.closingElement);
+                checkJsxChildren(node);
             }
-            else {
-                checkExpression(node.closingElement.tagName);
-            }
-
-            checkJsxChildren(node);
         }
 
-        function checkJsxElement(node: JsxElement, _checkMode: CheckMode | undefined): Type {
+        function checkJsxOpeningLikeElement(node: JsxElement | JsxSelfClosingElement, _checkmode?: CheckMode): Type {
             checkNodeDeferred(node);
-
             return getJsxElementTypeAt(node) || anyType;
         }
 
         function checkJsxFragment(node: JsxFragment): Type {
-            checkJsxOpeningLikeElementOrOpeningFragment(node.openingFragment);
+            checkJsxPreconditions(node.openingFragment);
 
             // by default, jsx:'react' will use jsxFactory = React.createElement and jsxFragmentFactory = React.Fragment
             // if jsxFactory compiler option is provided, ensure jsxFragmentFactory compiler option or @jsxFrag pragma is provided too
@@ -26359,12 +26336,6 @@ namespace ts {
             return !stringContains(name as string, "-");
         }
 
-        /**
-         * Returns true iff React would emit this tag name as a string rather than an identifier or qualified name
-         */
-        function isJsxIntrinsicIdentifier(tagName: JsxTagNameExpression): boolean {
-            return tagName.kind === SyntaxKind.Identifier && isIntrinsicJsxName(tagName.escapedText);
-        }
 
         function checkJsxAttribute(node: JsxAttribute, checkMode?: CheckMode) {
             return node.initializer
@@ -26777,7 +26748,7 @@ namespace ts {
          * @param node an intrinsic JSX opening-like element
          */
         function getIntrinsicAttributesTypeFromJsxOpeningLikeElement(node: JsxOpeningLikeElement): Type {
-            Debug.assert(isJsxIntrinsicIdentifier(node.tagName));
+            Debug.assert(jsxutil.isJsxIntrinsicIdentifier(node.tagName));
             const links = getNodeLinks(node);
             if (!links.resolvedJsxElementAttributesType) {
                 const symbol = getIntrinsicTagSymbol(node);
@@ -26820,34 +26791,24 @@ namespace ts {
             return intrinsics ? getPropertiesOfType(intrinsics) : emptyArray;
         }
 
-        function checkJsxPreconditions(errorNode: Node) {
+        function checkJsxPreconditions(node: Node) {
             // Preconditions for using JSX
             if ((compilerOptions.jsx || JsxEmit.None) === JsxEmit.None) {
-                error(errorNode, Diagnostics.Cannot_use_JSX_unless_the_jsx_flag_is_provided);
+                error(node, Diagnostics.Cannot_use_JSX_unless_the_jsx_flag_is_provided);
             }
 
-            if (getJsxElementTypeAt(errorNode) === undefined) {
+            if (getJsxElementTypeAt(node) === undefined) {
                 if (noImplicitAny) {
-                    error(errorNode, Diagnostics.JSX_element_implicitly_has_type_any_because_the_global_type_JSX_Element_does_not_exist);
+                    error(node, Diagnostics.JSX_element_implicitly_has_type_any_because_the_global_type_JSX_Element_does_not_exist);
                 }
             }
-        }
-
-        function checkJsxOpeningLikeElementOrOpeningFragment(node: JsxOpeningLikeElement | JsxOpeningFragment) {
-            const isNodeOpeningLikeElement = isJsxOpeningLikeElement(node);
-
-            if (isNodeOpeningLikeElement) {
-                checkGrammarJsxElement(<JsxOpeningLikeElement>node);
-            }
-
-            checkJsxPreconditions(node);
 
             if (!getJsxNamespaceContainerForImplicitImport(node)) {
                 // The reactNamespace/jsxFactory's root symbol should be marked as 'used' so we don't incorrectly elide its import.
                 // And if there is no reactNamespace/jsxFactory's symbol in scope when targeting React emit, we should issue an error.
                 const jsxFactoryRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
                 const jsxFactoryNamespace = getJsxNamespace(node);
-                const jsxFactoryLocation = isNodeOpeningLikeElement ? (<JsxOpeningLikeElement>node).tagName : node;
+                const jsxFactoryLocation = isJsxOpeningLikeElement(node) ? node.tagName : node;
 
                 // allow null as jsxFragmentFactory
                 let jsxFactorySym: Symbol | undefined;
@@ -26865,13 +26826,6 @@ namespace ts {
                         markAliasSymbolAsReferenced(jsxFactorySym);
                     }
                 }
-            }
-
-            if (isNodeOpeningLikeElement) {
-                const jsxOpeningLikeNode = node as JsxOpeningLikeElement;
-                const sig = getResolvedSignature(jsxOpeningLikeNode);
-                checkDeprecatedSignature(sig, <JsxOpeningLikeElement>node);
-                checkJsxReturnAssignableToAppropriateBound(getJsxReferenceKind(jsxOpeningLikeNode), getReturnTypeOfSignature(sig), jsxOpeningLikeNode);
             }
         }
 
@@ -28256,7 +28210,7 @@ namespace ts {
         }
 
         function getJsxReferenceKind(node: JsxOpeningLikeElement): JsxReferenceKind {
-            if (isJsxIntrinsicIdentifier(node.tagName)) {
+            if (jsxutil.isJsxIntrinsicIdentifier(node.tagName)) {
                 return JsxReferenceKind.Mixed;
             }
             const tagType = getApparentType(checkExpression(node.tagName));
@@ -28303,7 +28257,7 @@ namespace ts {
                 if (getJsxNamespaceContainerForImplicitImport(node)) {
                     return true; // factory is implicitly jsx/jsxdev - assume it fits the bill, since we don't strongly look for the jsx/jsxs/jsxDEV factory APIs anywhere else (at least not yet)
                 }
-                const tagType = isJsxOpeningElement(node) || isJsxSelfClosingElement(node) && !isJsxIntrinsicIdentifier(node.tagName) ? checkExpression(node.tagName) : undefined;
+                const tagType = isJsxOpeningElement(node) || isJsxSelfClosingElement(node) && !jsxutil.isJsxIntrinsicIdentifier(node.tagName) ? checkExpression(node.tagName) : undefined;
                 if (!tagType) {
                     return true;
                 }
@@ -29650,7 +29604,7 @@ namespace ts {
         }
 
         function resolveJsxOpeningLikeElement(node: JsxOpeningLikeElement, candidatesOutArray: Signature[] | undefined, checkMode: CheckMode): Signature {
-            if (isJsxIntrinsicIdentifier(node.tagName)) {
+            if (jsxutil.isJsxIntrinsicIdentifier(node.tagName)) {
                 const result = getIntrinsicAttributesTypeFromJsxOpeningLikeElement(node);
                 const fakeSignature = createSignatureForJSXIntrinsic(node, result);
                 checkTypeAssignableToAndOptionallyElaborate(checkExpressionWithContextualType(node.attributes, getEffectiveFirstArgumentForJsxSignature(fakeSignature, node), /*mapper*/ undefined, CheckMode.Normal), result, node.tagName, node.attributes);
@@ -32802,9 +32756,9 @@ namespace ts {
                 case SyntaxKind.JsxExpression:
                     return checkJsxExpression(<JsxExpression>node, checkMode);
                 case SyntaxKind.JsxElement:
-                    return checkJsxElement(<JsxElement>node, checkMode);
+                    return checkJsxOpeningLikeElement(<JsxElement>node, checkMode);
                 case SyntaxKind.JsxSelfClosingElement:
-                    return checkJsxSelfClosingElement(<JsxSelfClosingElement>node, checkMode);
+                    return checkJsxOpeningLikeElement(<JsxSelfClosingElement>node, checkMode);
                 case SyntaxKind.JsxFragment:
                     return checkJsxFragment(<JsxFragment>node);
                 case SyntaxKind.JsxAttributes:
@@ -38754,10 +38708,10 @@ namespace ts {
                     checkClassExpressionDeferred(<ClassExpression>node);
                     break;
                 case SyntaxKind.JsxSelfClosingElement:
-                    checkJsxSelfClosingElementDeferred(<JsxSelfClosingElement>node);
+                    checkJsxOpeningLikeElementDeferred(<JsxSelfClosingElement>node);
                     break;
                 case SyntaxKind.JsxElement:
-                    checkJsxElementDeferred(<JsxElement>node);
+                    checkJsxOpeningLikeElementDeferred(<JsxElement>node);
                     break;
             }
             currentNode = saveCurrentNode;
@@ -39232,7 +39186,7 @@ namespace ts {
                 }
 
                 if (name.kind === SyntaxKind.Identifier) {
-                    if (isJSXTagName(name) && isJsxIntrinsicIdentifier(name)) {
+                    if (isJSXTagName(name) && jsxutil.isJsxIntrinsicIdentifier(name)) {
                         const symbol = getIntrinsicTagSymbol(<JsxOpeningLikeElement>name.parent);
                         return symbol === unknownSymbol ? undefined : symbol;
                     }

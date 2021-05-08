@@ -3911,11 +3911,6 @@ namespace ts {
             charCode === CharacterCodes.backtick;
     }
 
-    export function isIntrinsicJsxName(name: __String | string) {
-        const ch = (name as string).charCodeAt(0);
-        return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || stringContains((name as string), "-") || stringContains((name as string), ":");
-    }
-
     const indentStrings: string[] = ["", "    "];
     export function getIndentString(level: number) {
         // prepopulate cache

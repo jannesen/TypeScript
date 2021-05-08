@@ -628,7 +628,7 @@ namespace ts.codefix {
         const parent = symbolToken.parent;
         if ((isJsxOpeningLikeElement(parent) || isJsxClosingElement(parent)) && parent.tagName === symbolToken && compilerOptions.jsx !== JsxEmit.ReactJSX && compilerOptions.jsx !== JsxEmit.ReactJSXDev) {
             const jsxNamespace = checker.getJsxNamespace(sourceFile);
-            if (isIntrinsicJsxName(symbolToken.text) || !checker.resolveName(jsxNamespace, parent, SymbolFlags.Value, /*excludeGlobals*/ true)) {
+            if (jsxutil.isJsxIntrinsicIdentifier(symbolToken) || !checker.resolveName(jsxNamespace, parent, SymbolFlags.Value, /*excludeGlobals*/ true)) {
                 return jsxNamespace;
             }
         }
