@@ -1736,7 +1736,7 @@ namespace ts {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const node = getAdjustedRenameLocation(getTouchingPropertyName(sourceFile, position));
-            if (isIdentifier(node) && (isJsxOpeningElement(node.parent) || isJsxClosingElement(node.parent)) && jsxutil.isJsxIntrinsicIdentifier(node)) {
+            if (isIdentifier(node) && (isJsxOpeningElement(node.parent) || isJsxClosingElement(node.parent)) && program.getTypeChecker().getJsxImplementation(node.parent).info.isJsxIntrinsicIdentifier(node)) {
                 const { openingElement, closingElement } = node.parent.parent;
                 return [openingElement, closingElement].map((node): RenameLocation => {
                     const textSpan = createTextSpanFromNode(node.tagName, sourceFile);

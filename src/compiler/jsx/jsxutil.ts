@@ -1,5 +1,18 @@
 /* @internal */
 namespace ts.jsxutil {
+    //---------------------------------
+    // Checker utils
+    //---------------------------------
+
+    export function markAsSynthetic(node: Node): VisitResult<Node> {
+        setTextRangePosEnd(node, -1, -1);
+        return visitEachChild(node, markAsSynthetic, nullTransformationContext);
+    }
+
+    //---------------------------------
+    // Transform utils
+    //---------------------------------
+
     export function isJsxIntrinsicIdentifier(tagName: JsxTagNameExpression): boolean {
         return tagName.kind === SyntaxKind.Identifier && isIntrinsicJsxName(tagName.escapedText);
     }

@@ -567,7 +567,7 @@ namespace ts.codefix {
         // The error wasn't for the symbolAtLocation, it was for the JSX tag itself, which needs access to e.g. `React`.
         const { parent } = token;
         return (isJsxOpeningLikeElement(parent) && parent.tagName === token) || isJsxOpeningFragment(parent)
-            ? tryCast(checker.resolveName(checker.getJsxNamespace(parent), isJsxOpeningLikeElement(parent) ? token : parent, SymbolFlags.Value, /*excludeGlobals*/ false), isUMDExportSymbol)
+            ? tryCast(checker.resolveName(checker.getJsxImplementation(parent).info.getJsxNamespace(parent), isJsxOpeningLikeElement(parent) ? token : parent, SymbolFlags.Value, /*excludeGlobals*/ false), isUMDExportSymbol)
             : undefined;
     }
 
@@ -627,8 +627,9 @@ namespace ts.codefix {
     function getSymbolName(sourceFile: SourceFile, checker: TypeChecker, symbolToken: Identifier, compilerOptions: CompilerOptions): string {
         const parent = symbolToken.parent;
         if ((isJsxOpeningLikeElement(parent) || isJsxClosingElement(parent)) && parent.tagName === symbolToken && compilerOptions.jsx !== JsxEmit.ReactJSX && compilerOptions.jsx !== JsxEmit.ReactJSXDev) {
-            const jsxNamespace = checker.getJsxNamespace(sourceFile);
-            if (jsxutil.isJsxIntrinsicIdentifier(symbolToken) || !checker.resolveName(jsxNamespace, parent, SymbolFlags.Value, /*excludeGlobals*/ true)) {
+            const jsxImp = checker.getJsxImplementation(sourceFile).info;
+            const jsxNamespace = jsxImp.getJsxNamespace(sourceFile);
+            if (jsxImp.isJsxIntrinsicIdentifier(symbolToken) || !checker.resolveName(jsxNamespace, parent, SymbolFlags.Value, /*excludeGlobals*/ true)) {
                 return jsxNamespace;
             }
         }
