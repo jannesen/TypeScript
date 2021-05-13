@@ -34,7 +34,7 @@ namespace ts {
         return react;
     }
 
-    function createJsxFactoryExpressionFromEntityName(factory: NodeFactory, jsxFactory: EntityName, parent: JsxOpeningLikeElement | JsxOpeningFragment): Expression {
+    export function createJsxFactoryExpressionFromEntityName(factory: NodeFactory, jsxFactory: EntityName, parent: JsxOpeningLikeElement | JsxOpeningFragment): Expression {
         if (isQualifiedName(jsxFactory)) {
             const left = createJsxFactoryExpressionFromEntityName(factory, jsxFactory.left, parent);
             const right = factory.createIdentifier(idText(jsxFactory.right)) as Mutable<Identifier>;

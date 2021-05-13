@@ -80,6 +80,7 @@
         "tsbuild.ts",
         "tsbuildPublic.ts",
         "jsx/react.ts",
+        "jsx/generic.ts",
         "jsx/jsxutil.ts"
     ]
 }

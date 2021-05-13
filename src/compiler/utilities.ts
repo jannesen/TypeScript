@@ -7243,4 +7243,8 @@ namespace ts {
                 return (parent as SourceFile).statements;
         }
     }
+
+    export function getFullEntityName(entityName: EntityName): string {
+        return (entityName.kind === SyntaxKind.QualifiedName) ? getFullEntityName(entityName.left) + "." + unescapeLeadingUnderscores(entityName.right.escapedText) : unescapeLeadingUnderscores(entityName.escapedText);
+    }
 }

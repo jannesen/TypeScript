@@ -6493,5 +6493,38 @@
     "Class decorators can't be used with static private identifier. Consider removing the experimental decorator.": {
         "category": "Error",
         "code": 18036
+    },
+
+    "Not supported JSX element.": {
+        "category": "Error",
+        "code": 20000
+    },
+    "Intrinsic JSX element '{0}' does not exist in factory '{1}'.": {
+        "category": "Error",
+        "code": 20001
+    },
+    "JSX element '{0}' has no children.": {
+        "category": "Error",
+        "code": 20002
+    },
+    "Invalid jsx-mode pragma. Must be react or generic.": {
+        "category": "Error",
+        "code": 20010
+    },
+    "Invalid factory in jsx-intrinsic-factory pragma.": {
+        "category": "Error",
+        "code": 20011
+    },
+    "Invalid factory in jsx pragma.": {
+        "category": "Error",
+        "code": 20012
+    },
+    "No JSX intrinsic factory defined.": {
+        "category": "Error",
+        "code": 20013
+    },
+    "Invalid JSX intrinsic factory": {
+        "category": "Error",
+        "code": 20014
     }
 }

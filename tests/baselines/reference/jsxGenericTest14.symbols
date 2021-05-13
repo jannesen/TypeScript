@@ -1,0 +1,503 @@
+=== tests/cases/conformance/jsxGeneric/dom.ts ===
+export interface HTMLAttributes {
+>HTMLAttributes : Symbol(HTMLAttributes, Decl(dom.ts, 0, 0))
+
+    accept?:                string;
+>accept : Symbol(HTMLAttributes.accept, Decl(dom.ts, 0, 33))
+
+    acceptCharset?:         string;
+>acceptCharset : Symbol(HTMLAttributes.acceptCharset, Decl(dom.ts, 1, 35))
+
+    accessKey?:             string;
+>accessKey : Symbol(HTMLAttributes.accessKey, Decl(dom.ts, 2, 35))
+
+    action?:                string;
+>action : Symbol(HTMLAttributes.action, Decl(dom.ts, 3, 35))
+
+    allowFullScreen?:       boolean;
+>allowFullScreen : Symbol(HTMLAttributes.allowFullScreen, Decl(dom.ts, 4, 35))
+
+    allowTransparency?:     boolean;
+>allowTransparency : Symbol(HTMLAttributes.allowTransparency, Decl(dom.ts, 5, 36))
+
+    alt?:                   string;
+>alt : Symbol(HTMLAttributes.alt, Decl(dom.ts, 6, 36))
+
+    async?:                 boolean;
+>async : Symbol(HTMLAttributes.async, Decl(dom.ts, 7, 35))
+
+    autoComplete?:          boolean;
+>autoComplete : Symbol(HTMLAttributes.autoComplete, Decl(dom.ts, 8, 36))
+
+    autoFocus?:             boolean;
+>autoFocus : Symbol(HTMLAttributes.autoFocus, Decl(dom.ts, 9, 36))
+
+    autoPlay?:              boolean;
+>autoPlay : Symbol(HTMLAttributes.autoPlay, Decl(dom.ts, 10, 36))
+
+    cellPadding?:           number | string;
+>cellPadding : Symbol(HTMLAttributes.cellPadding, Decl(dom.ts, 11, 36))
+
+    cellSpacing?:           number | string;
+>cellSpacing : Symbol(HTMLAttributes.cellSpacing, Decl(dom.ts, 12, 44))
+
+    charSet?:               string;
+>charSet : Symbol(HTMLAttributes.charSet, Decl(dom.ts, 13, 44))
+
+    checked?:               boolean;
+>checked : Symbol(HTMLAttributes.checked, Decl(dom.ts, 14, 35))
+
+    classID?:               string;
+>classID : Symbol(HTMLAttributes.classID, Decl(dom.ts, 15, 36))
+
+    class?:                 string;
+>class : Symbol(HTMLAttributes.class, Decl(dom.ts, 16, 35))
+
+    colSpan?:               number | string;
+>colSpan : Symbol(HTMLAttributes.colSpan, Decl(dom.ts, 17, 35))
+
+    cols?:                  number;
+>cols : Symbol(HTMLAttributes.cols, Decl(dom.ts, 18, 44))
+
+    content?:               string;
+>content : Symbol(HTMLAttributes.content, Decl(dom.ts, 19, 35))
+
+    contentEditable?:       boolean;
+>contentEditable : Symbol(HTMLAttributes.contentEditable, Decl(dom.ts, 20, 35))
+
+    contextMenu?:           string;
+>contextMenu : Symbol(HTMLAttributes.contextMenu, Decl(dom.ts, 21, 36))
+
+    controls?:              any;
+>controls : Symbol(HTMLAttributes.controls, Decl(dom.ts, 22, 35))
+
+    coords?:                string;
+>coords : Symbol(HTMLAttributes.coords, Decl(dom.ts, 23, 32))
+
+    crossOrigin?:           string;
+>crossOrigin : Symbol(HTMLAttributes.crossOrigin, Decl(dom.ts, 24, 35))
+
+    data?:                  string;
+>data : Symbol(HTMLAttributes.data, Decl(dom.ts, 25, 35))
+
+    dateTime?:              string;
+>dateTime : Symbol(HTMLAttributes.dateTime, Decl(dom.ts, 26, 35))
+
+    defaultChecked?:        boolean;
+>defaultChecked : Symbol(HTMLAttributes.defaultChecked, Decl(dom.ts, 27, 35))
+
+    defaultValue?:          string;
+>defaultValue : Symbol(HTMLAttributes.defaultValue, Decl(dom.ts, 28, 36))
+
+    defer?:                 boolean;
+>defer : Symbol(HTMLAttributes.defer, Decl(dom.ts, 29, 35))
+
+    dir?:                   string;
+>dir : Symbol(HTMLAttributes.dir, Decl(dom.ts, 30, 36))
+
+    disabled?:              boolean;
+>disabled : Symbol(HTMLAttributes.disabled, Decl(dom.ts, 31, 35))
+
+    download?:              any;
+>download : Symbol(HTMLAttributes.download, Decl(dom.ts, 32, 36))
+
+    draggable?:             boolean;
+>draggable : Symbol(HTMLAttributes.draggable, Decl(dom.ts, 33, 32))
+
+    encType?:               string;
+>encType : Symbol(HTMLAttributes.encType, Decl(dom.ts, 34, 36))
+
+    for?:                   string;
+>for : Symbol(HTMLAttributes.for, Decl(dom.ts, 35, 35))
+
+    form?:                  string;
+>form : Symbol(HTMLAttributes.form, Decl(dom.ts, 36, 35))
+
+    formAction?:            string;
+>formAction : Symbol(HTMLAttributes.formAction, Decl(dom.ts, 37, 35))
+
+    formEncType?:           string;
+>formEncType : Symbol(HTMLAttributes.formEncType, Decl(dom.ts, 38, 35))
+
+    formMethod?:            string;
+>formMethod : Symbol(HTMLAttributes.formMethod, Decl(dom.ts, 39, 35))
+
+    formNoValidate?:        boolean;
+>formNoValidate : Symbol(HTMLAttributes.formNoValidate, Decl(dom.ts, 40, 35))
+
+    formTarget?:            string;
+>formTarget : Symbol(HTMLAttributes.formTarget, Decl(dom.ts, 41, 36))
+
+    frameBorder?:           number | string;
+>frameBorder : Symbol(HTMLAttributes.frameBorder, Decl(dom.ts, 42, 35))
+
+    headers?:               string;
+>headers : Symbol(HTMLAttributes.headers, Decl(dom.ts, 43, 44))
+
+    height?:                number | string;
+>height : Symbol(HTMLAttributes.height, Decl(dom.ts, 44, 35))
+
+    hidden?:                boolean;
+>hidden : Symbol(HTMLAttributes.hidden, Decl(dom.ts, 45, 44))
+
+    high?:                  number;
+>high : Symbol(HTMLAttributes.high, Decl(dom.ts, 46, 36))
+
+    href?:                  string;
+>href : Symbol(HTMLAttributes.href, Decl(dom.ts, 47, 35))
+
+    hrefLang?:              string;
+>hrefLang : Symbol(HTMLAttributes.hrefLang, Decl(dom.ts, 48, 35))
+
+    htmlFor?:               string;
+>htmlFor : Symbol(HTMLAttributes.htmlFor, Decl(dom.ts, 49, 35))
+
+    httpEquiv?:             string;
+>httpEquiv : Symbol(HTMLAttributes.httpEquiv, Decl(dom.ts, 50, 35))
+
+    icon?:                  string;
+>icon : Symbol(HTMLAttributes.icon, Decl(dom.ts, 51, 35))
+
+    id?:                    string;
+>id : Symbol(HTMLAttributes.id, Decl(dom.ts, 52, 35))
+
+    label?:                 string;
+>label : Symbol(HTMLAttributes.label, Decl(dom.ts, 53, 35))
+
+    lang?:                  string;
+>lang : Symbol(HTMLAttributes.lang, Decl(dom.ts, 54, 35))
+
+    list?:                  string;
+>list : Symbol(HTMLAttributes.list, Decl(dom.ts, 55, 35))
+
+    loop?:                  boolean;
+>loop : Symbol(HTMLAttributes.loop, Decl(dom.ts, 56, 35))
+
+    low?:                   number;
+>low : Symbol(HTMLAttributes.low, Decl(dom.ts, 57, 36))
+
+    manifest?:              string;
+>manifest : Symbol(HTMLAttributes.manifest, Decl(dom.ts, 58, 35))
+
+    marginHeight?:          number;
+>marginHeight : Symbol(HTMLAttributes.marginHeight, Decl(dom.ts, 59, 35))
+
+    marginWidth?:           number;
+>marginWidth : Symbol(HTMLAttributes.marginWidth, Decl(dom.ts, 60, 35))
+
+    max?:                   number | string;
+>max : Symbol(HTMLAttributes.max, Decl(dom.ts, 61, 35))
+
+    maxLength?:             number;
+>maxLength : Symbol(HTMLAttributes.maxLength, Decl(dom.ts, 62, 44))
+
+    media?:                 string;
+>media : Symbol(HTMLAttributes.media, Decl(dom.ts, 63, 35))
+
+    mediaGroup?:            string;
+>mediaGroup : Symbol(HTMLAttributes.mediaGroup, Decl(dom.ts, 64, 35))
+
+    method?:                string;
+>method : Symbol(HTMLAttributes.method, Decl(dom.ts, 65, 35))
+
+    min?:                   number | string;
+>min : Symbol(HTMLAttributes.min, Decl(dom.ts, 66, 35))
+
+    multiple?:              boolean;
+>multiple : Symbol(HTMLAttributes.multiple, Decl(dom.ts, 67, 44))
+
+    muted?:                 boolean;
+>muted : Symbol(HTMLAttributes.muted, Decl(dom.ts, 68, 36))
+
+    name?:                  string;
+>name : Symbol(HTMLAttributes.name, Decl(dom.ts, 69, 36))
+
+    noValidate?:            boolean;
+>noValidate : Symbol(HTMLAttributes.noValidate, Decl(dom.ts, 70, 35))
+
+    open?:                  boolean;
+>open : Symbol(HTMLAttributes.open, Decl(dom.ts, 71, 36))
+
+    optimum?:               number;
+>optimum : Symbol(HTMLAttributes.optimum, Decl(dom.ts, 72, 36))
+
+    pattern?:               string;
+>pattern : Symbol(HTMLAttributes.pattern, Decl(dom.ts, 73, 35))
+
+    placeholder?:           string;
+>placeholder : Symbol(HTMLAttributes.placeholder, Decl(dom.ts, 74, 35))
+
+    poster?:                string;
+>poster : Symbol(HTMLAttributes.poster, Decl(dom.ts, 75, 35))
+
+    preload?:               string;
+>preload : Symbol(HTMLAttributes.preload, Decl(dom.ts, 76, 35))
+
+    radioGroup?:            string;
+>radioGroup : Symbol(HTMLAttributes.radioGroup, Decl(dom.ts, 77, 35))
+
+    readOnly?:              boolean;
+>readOnly : Symbol(HTMLAttributes.readOnly, Decl(dom.ts, 78, 35))
+
+    rel?:                   string;
+>rel : Symbol(HTMLAttributes.rel, Decl(dom.ts, 79, 36))
+
+    required?:              boolean;
+>required : Symbol(HTMLAttributes.required, Decl(dom.ts, 80, 35))
+
+    role?:                  string;
+>role : Symbol(HTMLAttributes.role, Decl(dom.ts, 81, 36))
+
+    rowSpan?:               number;
+>rowSpan : Symbol(HTMLAttributes.rowSpan, Decl(dom.ts, 82, 35))
+
+    rows?:                  number;
+>rows : Symbol(HTMLAttributes.rows, Decl(dom.ts, 83, 35))
+
+    sandbox?:               string;
+>sandbox : Symbol(HTMLAttributes.sandbox, Decl(dom.ts, 84, 35))
+
+    scope?:                 string;
+>scope : Symbol(HTMLAttributes.scope, Decl(dom.ts, 85, 35))
+
+    scoped?:                boolean;
+>scoped : Symbol(HTMLAttributes.scoped, Decl(dom.ts, 86, 35))
+
+    scrolling?:             string;
+>scrolling : Symbol(HTMLAttributes.scrolling, Decl(dom.ts, 87, 36))
+
+    seamless?:              boolean;
+>seamless : Symbol(HTMLAttributes.seamless, Decl(dom.ts, 88, 35))
+
+    selected?:              boolean;
+>selected : Symbol(HTMLAttributes.selected, Decl(dom.ts, 89, 36))
+
+    shape?:                 string;
+>shape : Symbol(HTMLAttributes.shape, Decl(dom.ts, 90, 36))
+
+    size?:                  number;
+>size : Symbol(HTMLAttributes.size, Decl(dom.ts, 91, 35))
+
+    sizes?:                 string;
+>sizes : Symbol(HTMLAttributes.sizes, Decl(dom.ts, 92, 35))
+
+    span?:                  number | string;
+>span : Symbol(HTMLAttributes.span, Decl(dom.ts, 93, 35))
+
+    spellCheck?:            boolean;
+>spellCheck : Symbol(HTMLAttributes.spellCheck, Decl(dom.ts, 94, 44))
+
+    src?:                   string;
+>src : Symbol(HTMLAttributes.src, Decl(dom.ts, 95, 36))
+
+    srcDoc?:                string;
+>srcDoc : Symbol(HTMLAttributes.srcDoc, Decl(dom.ts, 96, 35))
+
+    srcSet?:                string;
+>srcSet : Symbol(HTMLAttributes.srcSet, Decl(dom.ts, 97, 35))
+
+    start?:                 number;
+>start : Symbol(HTMLAttributes.start, Decl(dom.ts, 98, 35))
+
+    step?:                  number|string;
+>step : Symbol(HTMLAttributes.step, Decl(dom.ts, 99, 35))
+
+    style?:                 string;
+>style : Symbol(HTMLAttributes.style, Decl(dom.ts, 100, 42))
+
+    tabIndex?:              number|string;
+>tabIndex : Symbol(HTMLAttributes.tabIndex, Decl(dom.ts, 101, 35))
+
+    target?:                string;
+>target : Symbol(HTMLAttributes.target, Decl(dom.ts, 102, 42))
+
+    title?:                 string;
+>title : Symbol(HTMLAttributes.title, Decl(dom.ts, 103, 35))
+
+    type?:                  string;
+>type : Symbol(HTMLAttributes.type, Decl(dom.ts, 104, 35))
+
+    useMap?:                string;
+>useMap : Symbol(HTMLAttributes.useMap, Decl(dom.ts, 105, 35))
+
+    value?:                 string;
+>value : Symbol(HTMLAttributes.value, Decl(dom.ts, 106, 35))
+
+    width?:                 number|string;
+>width : Symbol(HTMLAttributes.width, Decl(dom.ts, 107, 35))
+
+    wmode?:                 string;
+>wmode : Symbol(HTMLAttributes.wmode, Decl(dom.ts, 108, 42))
+
+    onblur?:                EventHandler<FocusEvent>;
+>onblur : Symbol(HTMLAttributes.onblur, Decl(dom.ts, 109, 35))
+>EventHandler : Symbol(EventHandler, Decl(dom.ts, 133, 1))
+>FocusEvent : Symbol(FocusEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    onclick?:               EventHandler<MouseEvent>;
+>onclick : Symbol(HTMLAttributes.onclick, Decl(dom.ts, 111, 53))
+>EventHandler : Symbol(EventHandler, Decl(dom.ts, 133, 1))
+>MouseEvent : Symbol(MouseEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    onchange?:              EventHandler<Event>;
+>onchange : Symbol(HTMLAttributes.onchange, Decl(dom.ts, 112, 53))
+>EventHandler : Symbol(EventHandler, Decl(dom.ts, 133, 1))
+>Event : Symbol(Event, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    oncontextmenu?:         EventHandler<PointerEvent>;
+>oncontextmenu : Symbol(HTMLAttributes.oncontextmenu, Decl(dom.ts, 113, 48))
+>EventHandler : Symbol(EventHandler, Decl(dom.ts, 133, 1))
+>PointerEvent : Symbol(PointerEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    ondblclick?:            EventHandler<MouseEvent>;
+>ondblclick : Symbol(HTMLAttributes.ondblclick, Decl(dom.ts, 114, 55))
+>EventHandler : Symbol(EventHandler, Decl(dom.ts, 133, 1))
+>MouseEvent : Symbol(MouseEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    onerror?:               EventHandler<Event>;
+>onerror : Symbol(HTMLAttributes.onerror, Decl(dom.ts, 115, 53))
+>EventHandler : Symbol(EventHandler, Decl(dom.ts, 133, 1))
+>Event : Symbol(Event, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    onfocus?:               EventHandler<FocusEvent>;
+>onfocus : Symbol(HTMLAttributes.onfocus, Decl(dom.ts, 116, 48))
+>EventHandler : Symbol(EventHandler, Decl(dom.ts, 133, 1))
+>FocusEvent : Symbol(FocusEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    oninput?:               EventHandler<Event>;
+>oninput : Symbol(HTMLAttributes.oninput, Decl(dom.ts, 117, 53))
+>EventHandler : Symbol(EventHandler, Decl(dom.ts, 133, 1))
+>Event : Symbol(Event, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    onkeydown?:             EventHandler<KeyboardEvent>;
+>onkeydown : Symbol(HTMLAttributes.onkeydown, Decl(dom.ts, 118, 48))
+>EventHandler : Symbol(EventHandler, Decl(dom.ts, 133, 1))
+>KeyboardEvent : Symbol(KeyboardEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    onkeypress?:            EventHandler<KeyboardEvent>;
+>onkeypress : Symbol(HTMLAttributes.onkeypress, Decl(dom.ts, 119, 56))
+>EventHandler : Symbol(EventHandler, Decl(dom.ts, 133, 1))
+>KeyboardEvent : Symbol(KeyboardEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    onkeyup?:               EventHandler<KeyboardEvent>;
+>onkeyup : Symbol(HTMLAttributes.onkeyup, Decl(dom.ts, 120, 56))
+>EventHandler : Symbol(EventHandler, Decl(dom.ts, 133, 1))
+>KeyboardEvent : Symbol(KeyboardEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    onload?:                EventHandler<Event>;
+>onload : Symbol(HTMLAttributes.onload, Decl(dom.ts, 121, 56))
+>EventHandler : Symbol(EventHandler, Decl(dom.ts, 133, 1))
+>Event : Symbol(Event, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    onmousedown?:           EventHandler<MouseEvent>;
+>onmousedown : Symbol(HTMLAttributes.onmousedown, Decl(dom.ts, 122, 48))
+>EventHandler : Symbol(EventHandler, Decl(dom.ts, 133, 1))
+>MouseEvent : Symbol(MouseEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    onmouseenter?:          EventHandler<MouseEvent>;
+>onmouseenter : Symbol(HTMLAttributes.onmouseenter, Decl(dom.ts, 123, 53))
+>EventHandler : Symbol(EventHandler, Decl(dom.ts, 133, 1))
+>MouseEvent : Symbol(MouseEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    onmouseleave?:          EventHandler<MouseEvent>;
+>onmouseleave : Symbol(HTMLAttributes.onmouseleave, Decl(dom.ts, 124, 53))
+>EventHandler : Symbol(EventHandler, Decl(dom.ts, 133, 1))
+>MouseEvent : Symbol(MouseEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    onmousemove?:           EventHandler<MouseEvent>;
+>onmousemove : Symbol(HTMLAttributes.onmousemove, Decl(dom.ts, 125, 53))
+>EventHandler : Symbol(EventHandler, Decl(dom.ts, 133, 1))
+>MouseEvent : Symbol(MouseEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    onmouseout?:            EventHandler<MouseEvent>;
+>onmouseout : Symbol(HTMLAttributes.onmouseout, Decl(dom.ts, 126, 53))
+>EventHandler : Symbol(EventHandler, Decl(dom.ts, 133, 1))
+>MouseEvent : Symbol(MouseEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    onmouseover?:           EventHandler<MouseEvent>;
+>onmouseover : Symbol(HTMLAttributes.onmouseover, Decl(dom.ts, 127, 53))
+>EventHandler : Symbol(EventHandler, Decl(dom.ts, 133, 1))
+>MouseEvent : Symbol(MouseEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    onmouseup?:             EventHandler<MouseEvent>;
+>onmouseup : Symbol(HTMLAttributes.onmouseup, Decl(dom.ts, 128, 53))
+>EventHandler : Symbol(EventHandler, Decl(dom.ts, 133, 1))
+>MouseEvent : Symbol(MouseEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    onwheel?:               EventHandler<WheelEvent>;
+>onwheel : Symbol(HTMLAttributes.onwheel, Decl(dom.ts, 129, 53))
+>EventHandler : Symbol(EventHandler, Decl(dom.ts, 133, 1))
+>WheelEvent : Symbol(WheelEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    onscroll?:              EventHandler<UIEvent>;
+>onscroll : Symbol(HTMLAttributes.onscroll, Decl(dom.ts, 130, 53))
+>EventHandler : Symbol(EventHandler, Decl(dom.ts, 133, 1))
+>UIEvent : Symbol(UIEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    onselect?:              EventHandler<UIEvent>;
+>onselect : Symbol(HTMLAttributes.onselect, Decl(dom.ts, 131, 50))
+>EventHandler : Symbol(EventHandler, Decl(dom.ts, 133, 1))
+>UIEvent : Symbol(UIEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+}
+
+export interface EventHandler<T> {
+>EventHandler : Symbol(EventHandler, Decl(dom.ts, 133, 1))
+>T : Symbol(T, Decl(dom.ts, 135, 30))
+
+    (event: T): void;
+>event : Symbol(event, Decl(dom.ts, 136, 5))
+>T : Symbol(T, Decl(dom.ts, 135, 30))
+}
+
+type intrinsicNames = "a" | "abbr" | "address" | "area" | "article" | "aside" | "audio" | "b" | "base" | "bdi" | "bdo" | "big" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "footer" | "form" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "keygen" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "menu" | "menuitem" | "meta" | "meter" | "nav" | "noscript" | "object" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr";
+>intrinsicNames : Symbol(intrinsicNames, Decl(dom.ts, 137, 1))
+
+export interface AddArray extends Array<AddNode> {}
+>AddArray : Symbol(AddArray, Decl(dom.ts, 139, 1063))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
+>AddNode : Symbol(AddNode, Decl(dom.ts, 141, 51))
+
+export type AddNode    = HTMLElement|string|AddArray|undefined|null|false;
+>AddNode : Symbol(AddNode, Decl(dom.ts, 141, 51))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>AddArray : Symbol(AddArray, Decl(dom.ts, 139, 1063))
+
+export function createElement(tagName:intrinsicNames, attrs?: HTMLAttributes, ...children:AddNode[]): HTMLElement {
+>createElement : Symbol(createElement, Decl(dom.ts, 142, 74))
+>tagName : Symbol(tagName, Decl(dom.ts, 144, 30))
+>intrinsicNames : Symbol(intrinsicNames, Decl(dom.ts, 137, 1))
+>attrs : Symbol(attrs, Decl(dom.ts, 144, 53))
+>HTMLAttributes : Symbol(HTMLAttributes, Decl(dom.ts, 0, 0))
+>children : Symbol(children, Decl(dom.ts, 144, 77))
+>AddNode : Symbol(AddNode, Decl(dom.ts, 141, 51))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    return document.createElement(tagName);
+>document.createElement : Symbol(Document.createElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+>createElement : Symbol(Document.createElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>tagName : Symbol(tagName, Decl(dom.ts, 144, 30))
+}
+
+=== tests/cases/conformance/jsxGeneric/file.tsx ===
+/* @jsx-mode generic */
+/* @jsx-intrinsic-factory $JD.createElement */
+
+import * as $JD from "./dom";
+>$JD : Symbol($JD, Decl(file.tsx, 3, 6))
+
+function test() {
+>test : Symbol(test, Decl(file.tsx, 3, 29))
+
+    return <div class="test2" onkeydown={(ev) => { ev.preventDefault(); }}>
+>class : Symbol(class, Decl(file.tsx, 6, 15))
+>onkeydown : Symbol(onkeydown, Decl(file.tsx, 6, 29))
+>ev : Symbol(ev, Decl(file.tsx, 6, 42))
+>ev.preventDefault : Symbol(Event.preventDefault, Decl(lib.dom.d.ts, --, --))
+>ev : Symbol(ev, Decl(file.tsx, 6, 42))
+>preventDefault : Symbol(Event.preventDefault, Decl(lib.dom.d.ts, --, --))
+
+                <span>test</span>
+                <span/>
+           </div>;
+}

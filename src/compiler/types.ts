@@ -3495,8 +3495,10 @@ namespace ts {
         stringType: IntrinsicType;
         emptyJsxObjectType: ResolvedType;
         anySignature: Signature;
+        unknownSignature: Signature;
         assignableRelation: ESMap<string, RelationComparisonResult>;
         diagnostics: DiagnosticCollection;
+        factory: NodeFactory;
         nodeBuilder: {
             typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => TypeNode | undefined;
             symbolToEntityName: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => Identifier | QualifiedName | undefined;
@@ -3554,6 +3556,7 @@ namespace ts {
         getSymbolAtLocation(node: Node, ignoreErrors?: boolean): Symbol | undefined;
         getSymbolLinks(symbol: Symbol): SymbolLinks;
         getTypeAliasInstantiation(symbol: Symbol, typeArguments: readonly Type[] | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type;
+        getTypeArguments(type: TypeReference): readonly Type[]
         getTypeAtPosition(signature: Signature, pos: number): Type;
         getTypeOfFirstParameterOfSignatureWithFallback(signature: Signature, fallbackType: Type): Type;
         getTypeOfPropertyOfContextualType(type: Type, name: __String): Type | undefined;
@@ -3567,6 +3570,7 @@ namespace ts {
         intersectTypes(type1: Type | undefined, type2: Type | undefined): Type | undefined;
         isArrayLikeType(type: Type): boolean;
         isArrayOrTupleLikeType(type: Type): boolean;
+        isArrayType(type: Type): type is TypeReference
         isTupleLikeType(type: Type): boolean;
         isTypeAny(type: Type | undefined): boolean | undefined;
         isTypeRelatedTo(source: Type, target: Type, relation: ESMap<string, RelationComparisonResult>): boolean;
@@ -3583,6 +3587,8 @@ namespace ts {
         resolveSymbol(symbol: Symbol, dontResolveAlias?: boolean): Symbol;
         resolveSymbol(symbol: Symbol | undefined, dontResolveAlias?: boolean): Symbol | undefined;
         resolveUntypedCall(node: CallLikeExpression): Signature;
+        setEntityReferenced(sourceFile: SourceFile, entityName: EntityName, flags: SymbolFlags): void;
+        signatureHasRestParameter(s: Signature): boolean;
         someType(type: Type, f: (t: Type) => boolean): boolean;
         typeToString(type: Type, enclosingDeclaration: Node | undefined, flags: TypeFormatFlags, writer: EmitTextWriter): string;
     }
@@ -8458,6 +8464,14 @@ namespace ts {
             kind: PragmaKindFlags.MultiLine
         },
         "jsxruntime": {
+            args: [{ name: "factory" }],
+            kind: PragmaKindFlags.MultiLine
+        },
+        "jsx-mode": {
+            args: [{ name: "mode" }],
+            kind: PragmaKindFlags.MultiLine
+        },
+        "jsx-intrinsic-factory": {
             args: [{ name: "factory" }],
             kind: PragmaKindFlags.MultiLine
         },

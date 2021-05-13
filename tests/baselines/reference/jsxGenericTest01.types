@@ -1,0 +1,46 @@
+=== tests/cases/conformance/jsxGeneric/file.tsx ===
+/* @jsx-mode generic */
+/* @jsx-intrinsic-factory createElement */
+
+interface HTMLAttributes {
+    class?:     string;
+>class : string
+
+    id?:        string;
+>id : string
+
+    onclick?:   (this: HTMLElement, ev: MouseEvent) => void;
+>onclick : (this: HTMLElement, ev: MouseEvent) => void
+>this : HTMLElement
+>ev : MouseEvent
+}
+ 
+function createElement(tagName:"div"|"span", attrs?: HTMLAttributes, ...children:HTMLElement[]): HTMLElement {
+>createElement : (tagName: "div" | "span", attrs?: HTMLAttributes, ...children: HTMLElement[]) => HTMLElement
+>tagName : "div" | "span"
+>attrs : HTMLAttributes
+>children : HTMLElement[]
+
+    return document.createElement(tagName);
+>document.createElement(tagName) : HTMLDivElement | HTMLSpanElement
+>document.createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; }
+>document : Document
+>createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; }
+>tagName : "div" | "span"
+}
+
+function test() {
+>test : () => HTMLElement
+
+    return <div class="test">
+><div class="test">                <span/>           </div> : HTMLElement
+>div : any
+>class : string
+
+                <span/>
+><span/> : HTMLElement
+>span : any
+
+           </div>;
+>div : any
+}
