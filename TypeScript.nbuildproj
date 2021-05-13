@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <PropertyGroup>
+    <NBuildProjectBuild Condition="'$(NBuildProjectBuild)'==''">$(MSBuildExtensionsPath)\Jannesen.NBuildProject\</NBuildProjectBuild>
+    <ProjectGuid>161a7fdc-a882-40e6-88a5-c4c589b2d0c9</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'" Label="Configuration">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'" Label="Configuration">
+  </PropertyGroup>
+  <Import Project="$(NBuildProjectBuild)NBuildProject.props" />
+  <Import Project="TypeScript.props" />  
+  <ItemGroup>
+    <File Include="*" />
+    <File Include="doc\**\*" />
+    <File Include="scripts\**\*" />
+    <File Include="src\**\*" />
+    <File Include="tests\cases\conformance\jsxGeneric\**\*" />
+  </ItemGroup>
+  <ItemGroup>
+    <File Remove=".editorconfig" />
+    <File Remove=".gitattributes" />
+    <File Remove=".gitmodules" />
+    <File Remove=".mailmap" />
+    <File Remove=".npmignore" />
+    <File Remove=".parallelperf.json" />
+    <File Remove=".travis.yml" />
+    <File Remove="TypeScript.nbuildproj" />
+    <File Remove="TypeScript.nbuildproj.user" />
+    <File Remove="TypeScript.sln" />
+  </ItemGroup>
+  <Import Project="$(NBuildProjectBuild)NBuildProject.targets" />
+  <Target Name="Clean">
+    <CallTarget Targets="GulpClean" />
+  </Target>
+  <Target Name="Build">
+    <CallTarget Targets="GulpBuild" />
+  </Target>
+  <Target Name="Rebuild">
+    <CallTarget Targets="Clean" />
+    <CallTarget Targets="Build" />
+  </Target>
+  <Target Name="GulpClean">
+    <ItemGroup>
+      <NodeToolsDirectory Include="$(NodeToolsDirectory)" />
+    </ItemGroup>
+    <ProcessBuild ProjectDirectory="$(MSBuildProjectDirectory)" ProcessBuildConfig="$(MSBuildProjectDirectory)\gulp-buildjs.nbconfig" Args="clean" />
+  </Target>
+  <Target Name="GulpBuild">
+    <ItemGroup>
+      <NodeToolsDirectory Include="$(NodeToolsDirectory)" />
+    </ItemGroup>
+    <ProcessBuild ProjectDirectory="$(MSBuildProjectDirectory)" ProcessBuildConfig="$(MSBuildProjectDirectory)\gulp-buildjs.nbconfig" Args="local" />
+  </Target>
+</Project>
