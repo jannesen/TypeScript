@@ -102,103 +102,6 @@ namespace ts {
         }
 
         /**
-         * Get the referencedFile from the import name node from file
-         */
-        function getReferencedFileFromImportLiteral(checker: TypeChecker, importName: StringLiteralLike) {
-            const symbol = checker.getSymbolAtLocation(importName);
-            return symbol && getReferencedFileFromImportedModuleSymbol(symbol);
-        }
-
-        /**
-         * Gets the path to reference file from file name, it could be resolvedPath if present otherwise path
-         */
-        function getReferencedFileFromFileName(program: Program, fileName: string, sourceFileDirectory: Path, getCanonicalFileName: GetCanonicalFileName): Path {
-            return toPath(program.getProjectReferenceRedirect(fileName) || fileName, sourceFileDirectory, getCanonicalFileName);
-        }
-
-        /**
-         * Gets the referenced files for a file from the program with values for the keys as referenced file's path to be true
-         */
-        function getReferencedFiles(program: Program, sourceFile: SourceFile, getCanonicalFileName: GetCanonicalFileName): Set<Path> | undefined {
-            let referencedFiles: Set<Path> | undefined;
-
-            // We need to use a set here since the code can contain the same import twice,
-            // but that will only be one dependency.
-            // To avoid invernal conversion, the key of the referencedFiles map must be of type Path
-            if (sourceFile.imports && sourceFile.imports.length > 0) {
-                const checker: TypeChecker = program.getTypeChecker();
-                for (const importName of sourceFile.imports) {
-                    const declarationSourceFilePath = getReferencedFileFromImportLiteral(checker, importName);
-                    if (declarationSourceFilePath) {
-                        addReferencedFile(declarationSourceFilePath);
-                    }
-                }
-            }
-
-            const sourceFileDirectory = getDirectoryPath(sourceFile.resolvedPath);
-            // Handle triple slash references
-            if (sourceFile.referencedFiles && sourceFile.referencedFiles.length > 0) {
-                for (const referencedFile of sourceFile.referencedFiles) {
-                    const referencedPath = getReferencedFileFromFileName(program, referencedFile.fileName, sourceFileDirectory, getCanonicalFileName);
-                    addReferencedFile(referencedPath);
-                }
-            }
-
-            // Handle type reference directives
-            if (sourceFile.resolvedTypeReferenceDirectiveNames) {
-                sourceFile.resolvedTypeReferenceDirectiveNames.forEach((resolvedTypeReferenceDirective) => {
-                    if (!resolvedTypeReferenceDirective) {
-                        return;
-                    }
-
-                    const fileName = resolvedTypeReferenceDirective.resolvedFileName!; // TODO: GH#18217
-                    const typeFilePath = getReferencedFileFromFileName(program, fileName, sourceFileDirectory, getCanonicalFileName);
-                    addReferencedFile(typeFilePath);
-                });
-            }
-
-            // Add module augmentation as references
-            if (sourceFile.moduleAugmentations.length) {
-                const checker = program.getTypeChecker();
-                for (const moduleName of sourceFile.moduleAugmentations) {
-                    if (!isStringLiteral(moduleName)) { continue; }
-                    const symbol = checker.getSymbolAtLocation(moduleName);
-                    if (!symbol) { continue; }
-
-                    // Add any file other than our own as reference
-                    addReferenceFromAmbientModule(symbol);
-                }
-            }
-
-            // From ambient modules
-            for (const ambientModule of program.getTypeChecker().getAmbientModules()) {
-                if (ambientModule.declarations && ambientModule.declarations.length > 1) {
-                    addReferenceFromAmbientModule(ambientModule);
-                }
-            }
-
-            return referencedFiles;
-
-            function addReferenceFromAmbientModule(symbol: Symbol) {
-                if (!symbol.declarations) {
-                    return;
-                }
-                // Add any file other than our own as reference
-                for (const declaration of symbol.declarations) {
-                    const declarationSourceFile = getSourceFileOfNode(declaration);
-                    if (declarationSourceFile &&
-                        declarationSourceFile !== sourceFile) {
-                        addReferencedFile(declarationSourceFile.resolvedPath);
-                    }
-                }
-            }
-
-            function addReferencedFile(referencedPath: Path) {
-                (referencedFiles || (referencedFiles = new Set())).add(referencedPath);
-            }
-        }
-
-        /**
          * Returns true if oldState is reusable, that is the emitKind = module/non module has not changed
          */
         export function canReuseOldState(newReferencedMap: ReadonlyESMap<Path, ReferencedSet> | undefined, oldState: Readonly<ReusableBuilderState> | undefined) {
@@ -208,7 +111,7 @@ namespace ts {
         /**
          * Creates the state of file references and signature for the new program from oldState if it is safe
          */
-        export function create(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<ReusableBuilderState>, disableUseFileVersionAsSignature?: boolean): BuilderState {
+        export function create(newProgram: Program, oldState?: Readonly<ReusableBuilderState>, disableUseFileVersionAsSignature?: boolean): BuilderState {
             const fileInfos = new Map<Path, FileInfo>();
             const referencedMap = newProgram.getCompilerOptions().module !== ModuleKind.None ? new Map<Path, ReferencedSet>() : undefined;
             const exportedModulesMap = referencedMap ? new Map<Path, ReferencedSet>() : undefined;
@@ -223,7 +126,7 @@ namespace ts {
                 const version = Debug.checkDefined(sourceFile.version, "Program intended to be used with Builder should have source files with versions set");
                 const oldInfo = useOldState ? oldState!.fileInfos.get(sourceFile.resolvedPath) : undefined;
                 if (referencedMap) {
-                    const newReferences = getReferencedFiles(newProgram, sourceFile, getCanonicalFileName);
+                    const newReferences = newProgram.getReferencedFiles(sourceFile);
                     if (newReferences) {
                         referencedMap.set(sourceFile.resolvedPath, newReferences);
                     }

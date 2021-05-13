@@ -1070,7 +1070,9 @@ namespace ts {
             getTypeChecker,
             getClassifiableNames,
             getDiagnosticsProducingTypeChecker,
+            getCanonicalFileName,
             getCommonSourceDirectory,
+            getReferencedFiles,
             emit,
             getCurrentDirectory: () => currentDirectory,
             getNodeCount: () => getDiagnosticsProducingTypeChecker().getNodeCount(),
@@ -3667,6 +3669,100 @@ namespace ts {
                 files,
                 getCanonicalFileName,
                 host.getCurrentDirectory()));
+        }
+
+        /**
+         * Gets the referenced files for a file from the program with values for the keys as referenced file's path to be true
+         */
+        function getReferencedFiles(sourceFile: SourceFile): Set<Path> | undefined {
+            let referencedFiles: Set<Path> | undefined;
+
+            // We need to use a set here since the code can contain the same import twice,
+            // but that will only be one dependency.
+            // To avoid invernal conversion, the key of the referencedFiles map must be of type Path
+            if (sourceFile.imports && sourceFile.imports.length > 0) {
+                const checker: TypeChecker = getTypeChecker();
+                for (const importName of sourceFile.imports) {
+                    const symbol = checker.getSymbolAtLocation(importName);
+                    if (symbol && symbol.declarations && symbol.declarations[0]) {
+                        const declarationSourceFile = getSourceFileOfNode(symbol.declarations[0]);
+                        const declarationSourceFilePath = declarationSourceFile && declarationSourceFile.resolvedPath;
+
+                        if (declarationSourceFilePath) {
+                            addReferencedFile(declarationSourceFilePath);
+                        }
+                    }
+                }
+            }
+
+            const sourceFileDirectory = getDirectoryPath(sourceFile.resolvedPath);
+            // Handle triple slash references
+            if (sourceFile.referencedFiles && sourceFile.referencedFiles.length > 0) {
+                for (const referencedFile of sourceFile.referencedFiles) {
+                    const referencedPath = getReferencedFileFromFileName(program, referencedFile.fileName, sourceFileDirectory);
+                    addReferencedFile(referencedPath);
+                }
+            }
+
+            // Handle type reference directives
+            if (sourceFile.resolvedTypeReferenceDirectiveNames) {
+                sourceFile.resolvedTypeReferenceDirectiveNames.forEach((resolvedTypeReferenceDirective) => {
+                    if (!resolvedTypeReferenceDirective) {
+                        return;
+                    }
+
+                    const fileName = resolvedTypeReferenceDirective.resolvedFileName!; // TODO: GH#18217
+                    const typeFilePath = getReferencedFileFromFileName(program, fileName, sourceFileDirectory);
+                    addReferencedFile(typeFilePath);
+                });
+            }
+
+            // Add module augmentation as references
+            if (sourceFile.moduleAugmentations.length) {
+                const checker = program.getTypeChecker();
+                for (const moduleName of sourceFile.moduleAugmentations) {
+                    if (!isStringLiteral(moduleName)) { continue; }
+                    const symbol = checker.getSymbolAtLocation(moduleName);
+                    if (!symbol) { continue; }
+
+                    // Add any file other than our own as reference
+                    addReferenceFromAmbientModule(symbol);
+                }
+            }
+
+            // From ambient modules
+            for (const ambientModule of program.getTypeChecker().getAmbientModules()) {
+                if (ambientModule.declarations && ambientModule.declarations.length > 1) {
+                    addReferenceFromAmbientModule(ambientModule);
+                }
+            }
+
+            return referencedFiles;
+
+            function addReferenceFromAmbientModule(symbol: Symbol) {
+                if (!symbol.declarations) {
+                    return;
+                }
+                // Add any file other than our own as reference
+                for (const declaration of symbol.declarations) {
+                    const declarationSourceFile = getSourceFileOfNode(declaration);
+                    if (declarationSourceFile &&
+                        declarationSourceFile !== sourceFile) {
+                        addReferencedFile(declarationSourceFile.resolvedPath);
+                    }
+                }
+            }
+
+            function addReferencedFile(referencedPath: Path) {
+                (referencedFiles || (referencedFiles = new Set())).add(referencedPath);
+            }
+        }
+
+        /**
+         * Gets the path to reference file from file name, it could be resolvedPath if present otherwise path
+         */
+        function getReferencedFileFromFileName(program: Program, fileName: string, sourceFileDirectory: Path): Path {
+            return ts.toPath(program.getProjectReferenceRedirect(fileName) || fileName, sourceFileDirectory, getCanonicalFileName);
         }
     }
 

@@ -2100,6 +2100,8 @@ declare namespace ts {
          */
         getTypeChecker(): TypeChecker;
         getCommonSourceDirectory(): string;
+        getCanonicalFileName(fileName: string): string;
+        getReferencedFiles(sourceFile: SourceFile): Set<Path> | undefined;
         getNodeCount(): number;
         getIdentifierCount(): number;
         getSymbolCount(): number;

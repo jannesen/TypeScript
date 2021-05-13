@@ -647,7 +647,7 @@ namespace ts.server {
                 return [];
             }
             updateProjectIfDirty(this);
-            this.builderState = BuilderState.create(this.program!, this.projectService.toCanonicalFileName, this.builderState, /*disableUseFileVersionAsSignature*/ true);
+            this.builderState = BuilderState.create(this.program!, this.builderState, /*disableUseFileVersionAsSignature*/ true);
             return mapDefined(
                 BuilderState.getFilesAffectedBy(
                     this.builderState,
